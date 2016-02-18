@@ -85,7 +85,6 @@ public class DispatchEventOnInput : MonoBehaviour
         
         if (inputFunc(Input))
         {
-            
             TargetObject.DispatchEvent(DispatchEventName);
         }
 	}

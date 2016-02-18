@@ -198,5 +198,131 @@ public class Reactive : MonoBehaviour
         
     }
 
+    //void OnTriggerEnter2D(Collision2D collision)
+    //{
+    //    if (!Active)
+    //    {
+    //        return;
+    //    }
+    //    if (!CollisionEvents)
+    //    {
+    //        return;
+    //    }
+
+    //    gameObject.DispatchEvent(Events.OnCollisionEnter2D, new CollisionEvent2D(collision));
+
+    //}
+
+    //void OnTriggerExit2D(Collision2D collision)
+    //{
+    //    if (!Active)
+    //    {
+    //        return;
+    //    }
+    //    if (!CollisionEvents)
+    //    {
+    //        return;
+    //    }
+    //    gameObject.DispatchEvent(Events.OnCollisionExit2D, new CollisionEvent2D(collision));
+    //}
+
+    //void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if (!Active)
+    //    {
+    //        return;
+    //    }
+    //    if (!CollisionEvents)
+    //    {
+    //        return;
+    //    }
+    //    gameObject.DispatchEvent(Events.OnCollisionStay2D, new CollisionEvent2D(collision));
+
+    //}
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+
+        gameObject.DispatchEvent(Events.OnCollisionEnter, new CollisionEvent3D(collision));
+
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionExit, new CollisionEvent3D(collision));
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionStay, new CollisionEvent3D(collision));
+
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+
+        gameObject.DispatchEvent(Events.OnCollisionEnter, new CollisionEvent3D());
+
+    }
+
+    void OnTriggerExit(Collider collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionExit, new CollisionEvent3D());
+    }
+
+    void OnTriggerStay(Collider collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionStay, new CollisionEvent3D());
+
+    }
+
 }
 
