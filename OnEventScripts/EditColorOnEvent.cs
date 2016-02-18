@@ -18,7 +18,14 @@ public class EditColorOnEvent : EditOnEvent
 	
     public override void OnEventFunc(EventData data)
     {
-        
+        if(Duration <= 0)
+        {
+            Renderer.color = TargetColor;
+            if(DispatchEvents)
+            {
+                DispatchEvent();
+            }
+        }
         var Seq = Action.Sequence(Actions);
         Action.Property(Seq, Renderer.GetProperty(o => o.color), TargetColor, Duration, EasingCurve);
         EditChecks(Seq);

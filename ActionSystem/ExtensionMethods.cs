@@ -75,7 +75,7 @@ public static class ExtensionMethods
 
         var getter = (Func<T>)Delegate.CreateDelegate(typeof(Func<T>), instance, accessedMember.GetGetMethod());
         var setter = (Action<T>)Delegate.CreateDelegate(typeof(Action<T>), instance, accessedMember.GetSetMethod());
-
+        
         return new Property<T>(getter, setter);
     }
 
@@ -167,14 +167,30 @@ public static class ExtensionMethods
     public static void DrawBaseDefaultInspector(this Editor me)
     {
         var type = me.target.GetType();
-        
-        var feilds = type.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
-        foreach (var i in feilds)
+        //Can be optimiezed using the iterator.
+        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
+        foreach (var i in fields)
         {
             var prop = me.serializedObject.FindProperty(i.Name);
+            
             if (prop != null)
             {
                 EditorGUILayout.PropertyField(prop);
+                if (prop.isArray && prop.isExpanded)
+                {
+                    //prop.arraySize = EditorGUILayout.IntField("   Elements",prop.arraySize);
+                    //Type objType = prop.type.GetType().GetGenericArguments()[0];
+                    while (prop.NextVisible(true))
+                    {
+                        if(prop.depth == 0)
+                        {
+                            break;
+                        }
+                        EditorGUILayout.PropertyField(prop);
+                        
+                    }
+
+                }
             }
         }
     }

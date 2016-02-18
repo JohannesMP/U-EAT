@@ -3,7 +3,7 @@ using System.Collections;
 using ActionSystem;
 using System.Collections.Generic;
 
-public class EditUniformTransformOnEvent : EditOnEvent
+public class EditPositionOnEvent : EditOnEvent
 {
     public bool Additive = false;
     public bool LocalPosition = true;

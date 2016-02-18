@@ -64,6 +64,7 @@ public class Events
     public static readonly String MouseAppear = "MouseAppear";
     public static readonly String IndexAppear = "IndexAppear";
     public static readonly String IndexDisappear = "IndexDisappear";
+    public static readonly String SpawnOptionsButton = "SpawnOptionsButton";
     //Nonstatic
     public string EventName = DefaultEvent;
     

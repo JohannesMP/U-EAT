@@ -3,7 +3,7 @@ using System.Collections;
 using ActionSystem;
 using System.Collections.Generic;
 
-public class EditUniformScaleOnEvent : EditOnEvent
+public class EditScaleOnEvent : EditOnEvent
 {
     public bool Additive = false;
     bool LocalScale = true;

@@ -46,7 +46,6 @@ namespace ActionSystem
 
         public static ActionSequence Sequence(ActionGroup grp, bool looping = false)
         {
-
             var sequence = new ActionSequence(looping);
             grp.AddAction(sequence);
             return sequence;

@@ -3,7 +3,7 @@ using System.Collections;
 using ActionSystem;
 using System.Collections.Generic;
 
-public class EditUniformRotationOnEvent : EditOnEvent
+public class EditRotationOnEvent : EditOnEvent
 {
 
     public bool Additive = false;

@@ -18,7 +18,7 @@ public class PlaySoundOnEvent : EditOnEvent
 
     public override void OnEventFunc(EventData data)
     {
-        if(!SoundClip || !Active)
+        if(!SoundClip)
         {
             return;
         }
@@ -26,11 +26,11 @@ public class PlaySoundOnEvent : EditOnEvent
         var Seq = Action.Sequence(Grp);
         Action.Delay(Seq, Delay);
         Action.Call(Seq, Source.Play);
-        if (DispatchOnFinish)
+        if(DispatchOnFinish)
         {
             Action.Delay(Seq, SoundClip.length);
+            Action.Call(Seq, DispatchEvent);
         }
-        this.EditChecks(Seq);
         
     }
 
