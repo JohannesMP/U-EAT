@@ -168,6 +168,7 @@ public static class ExtensionMethods
     {
         var type = me.target.GetType();
         //Can be optimiezed using the iterator.
+       
         var fields = type.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
         foreach (var i in fields)
         {
@@ -240,6 +241,16 @@ public static class ExtensionMethods
     public static void Trace<T>(this T instance, object param)
     {
         MonoBehaviour.print(param);
+    }
+
+    public static GameObject GetSpace(this MonoBehaviour instance)
+    {
+        var obj = GameObject.FindGameObjectWithTag("Space");
+        if (obj.Equals(null))
+        {
+            obj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Space"));
+        }
+        return obj;
     }
 
     public static int IndexOf<T>(this T[] instance, T param)

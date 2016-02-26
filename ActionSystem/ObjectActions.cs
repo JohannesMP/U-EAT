@@ -5,6 +5,7 @@ using ActionSystem;
 public class ObjectActions : MonoBehaviour
 {
     public ActionGroup Actions = new ActionGroup();
+    
 	// Use this for initialization
 	void Start ()
     {

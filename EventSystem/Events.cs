@@ -32,7 +32,8 @@ public class Events
 
     public static readonly String ApplicationPause = "PauseEvent";
     public static readonly String ApplicationResume = "ResumeEvent";
-    public static readonly String ApplicationFocus = "FocusEvent";
+    public static readonly String ApplicationGainFocus = "FocusEvent";
+    public static readonly String ApplicationLoseFocus = "FocusEvent";
 
     //OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.
     public static readonly String OnCollisionEnter = "OnCollisionEnter";
@@ -207,6 +208,7 @@ namespace CustomInspector
 
             var toggleRect = new Rect(propStartPos, position.y, ToggleWidth, position.height);
             var eventRect = new Rect(toggleRect.position.x + toggleRect.width, position.y, position.width - (toggleRect.position.x + toggleRect.width) + 14, position.height);
+            var prevAsString = AsString;
             AsString = EditorGUI.ToggleLeft(toggleRect, "AsString", AsString);
             if (!AsString && EventNames.Length != 0)
             {
@@ -214,9 +216,14 @@ namespace CustomInspector
 
                 if (index == -1)
                 {
-                    objectRef.stringValue = EditorGUI.TextField(eventRect, objectRef.stringValue);
-                    AsString = true;
-                    return;
+                    if (AsString == prevAsString)
+                    {
+                        objectRef.stringValue = EditorGUI.TextField(eventRect, objectRef.stringValue);
+                        AsString = true;
+                        return;
+                    }
+                    //SHould Add Confirmation
+                    index = 0;
                 }
                 
                 objectRef.stringValue = EventNames[EditorGUI.Popup(eventRect, "", index, EventValues)];

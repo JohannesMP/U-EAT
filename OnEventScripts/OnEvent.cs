@@ -10,7 +10,17 @@ public class OnEvent : MonoBehaviour
 {
     public EventData Data = new EventData();
     public System.Action<EventData> OnEventFunction;
-    public bool Active = true;
+    public bool Active
+    {
+        get
+        {
+            return enabled;
+        }
+        set
+        {
+            enabled = value;
+        }
+    }
     public Events ListenEventName = Events.DefaultEvent;
     public GameObject ListenTarget;
 
@@ -126,7 +136,8 @@ namespace CustomInspector
         SerializedProperty DispatchEventProp;
         SerializedProperty DispatchTargetProp;
 
-        string[] FunctionNames;
+        //For the OnEventFunc dropdown.
+        //string[] FunctionNames;
         List<Action<EventData>> FunctionList;
 
         public virtual void OnEnable()
@@ -152,33 +163,33 @@ namespace CustomInspector
                 comp.OnEventFunction = comp.OnEventFunc;
             }
 
-            var functions = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static);
-            List<string> functionNames = new List<string>();
-            
-            FunctionList = new List<System.Action<EventData>>();
-            foreach(var i in functions)
-            {
-                if(i.ReturnType == typeof(void) && !i.IsConstructor)
-                {
-                    var param = i.GetParameters();
-                    if(param.Length == 1 && param[0].ParameterType == typeof(EventData))
-                    {
-                        functionNames.Add(i.Name);
-                        Action<EventData> func;
-                        if (i.IsStatic)
-                        {
-                            func = (Action<EventData>)Delegate.CreateDelegate(typeof(Action<EventData>), i);
-                        }
-                        else
-                        {
-                            func = (Action<EventData>)Delegate.CreateDelegate(typeof(Action<EventData>),comp, i);
-                        }
-                        FunctionList.Add(func);
-                    }
-                }
-            }
+            //For the OnEventFunc dropdown.
+            //var functions = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static);
+            //List<string> functionNames = new List<string>();
+            //FunctionList = new List<System.Action<EventData>>();
+            //foreach(var i in functions)
+            //{
+            //    if(i.ReturnType == typeof(void) && !i.IsConstructor)
+            //    {
+            //        var param = i.GetParameters();
+            //        if(param.Length == 1 && param[0].ParameterType == typeof(EventData))
+            //        {
+            //            functionNames.Add(i.Name);
+            //            Action<EventData> func;
+            //            if (i.IsStatic)
+            //            {
+            //                func = (Action<EventData>)Delegate.CreateDelegate(typeof(Action<EventData>), i);
+            //            }
+            //            else
+            //            {
+            //                func = (Action<EventData>)Delegate.CreateDelegate(typeof(Action<EventData>),comp, i);
+            //            }
+            //            FunctionList.Add(func);
+            //        }
+            //    }
+            //}
 
-            FunctionNames = functionNames.ToArray();
+            //FunctionNames = functionNames.ToArray();
 
         }
 
@@ -196,6 +207,17 @@ namespace CustomInspector
 
         public void Draw()
         {
+            var iter = serializedObject.GetIterator();
+            //EditorGUILayout.PropertyField(iter);
+            iter.NextVisible(true);
+            if(iter.objectReferenceValue != null)
+            {
+                GUI.enabled = false;
+                //EditorStyles.
+            }
+            EditorGUILayout.PropertyField(iter);
+            GUI.enabled = true;
+
             OnEvent comp = target as OnEvent;
 
 
@@ -203,24 +225,25 @@ namespace CustomInspector
             EditorGUILayout.PrefixLabel("Active");
             optionsRect.width = optionsRect.width / 2;
             comp.Active = EditorGUI.Toggle(optionsRect, " ", comp.Active);
+            
             optionsRect.x += optionsRect.width;
             comp.DispatchEvents = EditorGUI.Toggle(optionsRect, "Dispatch Events", comp.DispatchEvents);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.PropertyField(ListenEventProp);
             EditorGUILayout.PropertyField(ListenTargetProp);
-            
-            var functionRect = EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel("");
-            var index = FunctionList.IndexOf(comp.OnEventFunction);
+            //Editor for the OnEventFunc dropdown
+            //var functionRect = EditorGUILayout.BeginHorizontal();
+            //EditorGUILayout.PrefixLabel("");
+            //var index = FunctionList.IndexOf(comp.OnEventFunction);
 
-            if (index == -1)
-            {
-                index = 0;
-            }
+            //if (index == -1)
+            //{
+            //    index = 0;
+            //}
 
-            comp.OnEventFunction = FunctionList[EditorGUI.Popup(functionRect, "Target Function", index, FunctionNames)];
-            EditorGUILayout.EndHorizontal();
+            //comp.OnEventFunction = FunctionList[EditorGUI.Popup(functionRect, "Target Function", index, FunctionNames)];
+            //EditorGUILayout.EndHorizontal();
 
             if (comp.DispatchEvents)
             {

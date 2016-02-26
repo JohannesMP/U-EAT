@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using System.Reflection;
+using System.Linq.Expressions;
 
 namespace ActionSystem
 {
@@ -16,7 +18,29 @@ namespace ActionSystem
     public class ActionMath
     {
         const double Pi = Mathf.PI;
-        
+
+        public static T LinearTest<T>(Double currentTime, T startValue, T endValue, Double duration)
+        {
+            var tType = typeof(T);
+            var dType = typeof(float);
+            ParameterExpression startVal = Expression.Parameter(tType, "startValue");
+            ParameterExpression endVal = Expression.Parameter(tType, "endValue");
+            ParameterExpression currentTimeVal = Expression.Parameter(dType, "currentTime");
+
+            BinaryExpression addExp = Expression.Add(endVal, startVal);
+            BinaryExpression subExp = Expression.Subtract(endVal, startVal);
+            BinaryExpression multExp = Expression.Multiply(startVal, currentTimeVal);
+            BinaryExpression divExp = Expression.Divide(startVal, currentTimeVal);
+
+            Func<T, T, T> sub = Expression.Lambda<Func<T, T, T>>(subExp, endVal, startVal).Compile();
+            Func<T, T, T> add = Expression.Lambda<Func<T, T, T>>(addExp, endVal, startVal).Compile();
+            Func<T, float, T> div = Expression.Lambda<Func<T, float, T>>(divExp, startVal, currentTimeVal).Compile();
+            Func<T, float, T> mult = Expression.Lambda<Func<T, float, T>>(multExp, startVal, currentTimeVal).Compile();
+            
+            T change = sub(endValue, startValue);
+            
+            return (add(div(mult(change, (float)currentTime) , (float)duration), startValue));
+        }
 
         public static T Linear<T>(Number<Double> currentTime, Number<T> startValue, Number<T> endValue, Number<Double> duration)
         {
