@@ -19,6 +19,7 @@ public class EditEmissiveOnEvent : EditOnEvent
         {
             throw new System.Exception("Object " + name + "Has not component 'Renderer'.");
         }
+        ObjectRenderer.material.EnableKeyword("_EMISSION");
     }
 
     public override void OnEventFunc(EventData data)
@@ -45,7 +46,9 @@ public class EditEmissiveOnEvent : EditOnEvent
 	    if(Running)
         {
             //Debug.Log(StartingColor);
+            
             ObjectRenderer.material.SetColor("_EmissionColor", StartingColor);
+            
         }
 	}
 }
