@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class LoadSceneOnEvent : OnEvent
 {
     public string SceneName;
-    
+    public LoadSceneMode SceneMode = LoadSceneMode.Single;
 	// Use this for initialization
 	public override void Awake ()
     {
@@ -22,7 +22,7 @@ public class LoadSceneOnEvent : OnEvent
         //LoadSceneMode.)
         //var scene = SceneManager.GetActiveScene();
         //option to destroy main camera.
-        SceneManager.LoadScene(SceneName, LoadSceneMode.Additive);
+        SceneManager.LoadScene(SceneName, SceneMode);
         //make each scene its own render layer
         //Debug.Log(SceneManager.GetSceneByName("TestLoadScene").buildIndex);
     }

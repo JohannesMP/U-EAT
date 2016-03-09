@@ -168,7 +168,6 @@ public static class ExtensionMethods
     {
         var type = me.target.GetType();
         //Can be optimiezed using the iterator.
-       
         var fields = type.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
         foreach (var i in fields)
         {

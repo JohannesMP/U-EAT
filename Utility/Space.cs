@@ -10,6 +10,7 @@ public class Space : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {
+        
         var obj = GameObject.FindGameObjectWithTag("Space");
         if(obj == null)
         {

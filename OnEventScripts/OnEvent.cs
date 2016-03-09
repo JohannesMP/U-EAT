@@ -114,9 +114,10 @@ public class OnEvent : MonoBehaviour
         DispatchTarget.DispatchEvent(DispatchEventName, Data);
     }
 
-    void OnDestroy()
+    public void OnDestroy()
     {
-        ListenTarget.Disconnect(ListenEventName, OnEventInternal);
+        //EventSystem.RemoveNullObjects();
+        //ListenTarget.Disconnect(ListenEventName, OnEventInternal);
     }
 }
 
@@ -138,7 +139,7 @@ namespace CustomInspector
 
         //For the OnEventFunc dropdown.
         //string[] FunctionNames;
-        List<Action<EventData>> FunctionList;
+        //List<Action<EventData>> FunctionList;
 
         public virtual void OnEnable()
         {

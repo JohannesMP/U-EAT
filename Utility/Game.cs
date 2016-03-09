@@ -11,11 +11,12 @@ public class Game : MonoBehaviour
     static GameObject GameEventHandler { get; set; }
 
     static GameObject HandlerResource;
-    static Game()
+    static void InitializeGame()
     {
         GameSession = Resources.Load<GameObject>("Prefabs/Core/GameSession");
         if(!GameSession)
         {
+            //return;
             throw new System.Exception("THE GAME MUST HAVE A GAMSESSION PREFAB!");
         }
         GameComp = GameSession.GetComponent<Game>();
@@ -39,6 +40,7 @@ public class Game : MonoBehaviour
     [RuntimeInitializeOnLoadMethod]
     public static void InitializeGameEventHandler()
     {
+        InitializeGame();
         if(!GameEventHandler)
         {
             GameEventHandler = Instantiate(HandlerResource);

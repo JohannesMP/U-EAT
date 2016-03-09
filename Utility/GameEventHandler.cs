@@ -8,7 +8,18 @@ public class GameEventHandler : MonoBehaviour
     void Awake()
     {
         Game.GameSession.DispatchEvent(Events.Create);
+        //StartCoroutine(RemoveNullEvents());
     }
+
+    //IEnumerator RemoveNullEvents()
+    //{
+    //    for (;;)
+    //    {
+    //        Debug.Log("Removing null objects!");
+    //        EventSystem.RemoveNullObjects();
+    //        yield return new WaitForSeconds(1f);
+    //    }
+    //}
 
     void Start ()
     {
