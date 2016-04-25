@@ -18,9 +18,5 @@ public class SetCursorVisibilityOnEvent : OnEvent
         Cursor.visible = CursorVisible;
     }
 
-    void OnDestroy()
-    {
-
-    }
 }
 

@@ -51,20 +51,20 @@ namespace CustomInspector
         public override void OnEnable()
         {
             base.OnEnable();
-
+            EditorDrawFunctions.Add(typeof(EditOnEvent), Draw);
             //EasingCurve = serializedObject.FindProperty("EasingCurve");
             //DeactivateUntilFinishedProp = serializedObject.FindProperty("DeactivateUntilFinished");
-
+            
         }
 
         public override void OnInspectorGUI()
         {
-            base.Draw();
+            base.OnInspectorGUI();
             
-            Draw();
-            serializedObject.ApplyModifiedProperties();
-            this.DrawBaseDefaultInspector();
-            serializedObject.ApplyModifiedProperties();
+            //Draw();
+            //serializedObject.ApplyModifiedProperties();
+            //this.DrawBaseDefaultInspector();
+            //serializedObject.ApplyModifiedProperties();
             //(target as OnEvent).Connect();
         }
 

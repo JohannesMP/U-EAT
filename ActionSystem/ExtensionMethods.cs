@@ -153,26 +153,42 @@ public static class ExtensionMethods
         return Actions.Actions;
     }
 
-    public static AudioSource GetAudioSource(this MonoBehaviour me)
+    public static ActionGroup GetActions(this GameObject me)
     {
-        var Audio = me.GetComponent<AudioSource>();
-        if (Audio == null)
+        var Actions = me.GetComponent<ObjectActions>();
+        if (Actions == null)
         {
-            Audio = me.gameObject.AddComponent<AudioSource>();
+            Actions = me.gameObject.AddComponent<ObjectActions>();
         }
-        return Audio;
+        return Actions.Actions;
+    }
+
+    public static T GetOrAddComponent<T>(this MonoBehaviour me) where T: Behaviour
+    {
+        var comp = me.GetComponent<T>();
+        if (comp == null)
+        {
+            comp = me.gameObject.AddComponent<T>();
+        }
+        return comp;
     }
 
 #if UNITY_EDITOR
     public static void DrawBaseDefaultInspector(this Editor me)
     {
         var type = me.target.GetType();
+        me.DrawDefaultInspector(type);
+    }
+
+    public static void DrawDefaultInspector(this Editor me, Type type)
+    {
+        
         //Can be optimiezed using the iterator.
         var fields = type.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public);
         foreach (var i in fields)
         {
             var prop = me.serializedObject.FindProperty(i.Name);
-            
+
             if (prop != null)
             {
                 EditorGUILayout.PropertyField(prop);
@@ -182,12 +198,12 @@ public static class ExtensionMethods
                     //Type objType = prop.type.GetType().GetGenericArguments()[0];
                     while (prop.NextVisible(true))
                     {
-                        if(prop.depth == 0)
+                        if (prop.depth == 0)
                         {
                             break;
                         }
                         EditorGUILayout.PropertyField(prop);
-                        
+
                     }
 
                 }

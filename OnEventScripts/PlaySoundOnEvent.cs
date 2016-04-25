@@ -10,33 +10,41 @@ public class PlaySoundOnEvent : EditOnEvent
     ActionGroup Grp;
     AudioSource Source;
 	// Use this for initialization
-	void Start()
+	public override void Awake()
     {
+        base.Awake();
         Grp = this.GetActions();
-        Source = this.GetAudioSource();
-	}
+        Source = this.GetOrAddComponent<AudioSource>();
+        Source.ignoreListenerVolume = false;
+    }
 
     public override void OnEventFunc(EventData data)
     {
-        if(!SoundClip)
+        if(!Active)
         {
             return;
         }
+
         Source.clip = SoundClip;
         var Seq = Action.Sequence(Grp);
         Action.Delay(Seq, Delay);
-        Action.Call(Seq, Source.Play);
+        if(SoundClip)
+        {
+            Action.Call(Seq, Source.Play);
+        }
+        else
+        {
+            Action.Call(Seq, Source.Stop);
+        }
         if(DispatchOnFinish)
         {
-            Action.Delay(Seq, SoundClip.length);
+            if(SoundClip)
+            {
+                Action.Delay(Seq, SoundClip.length);
+            }
+            
             Action.Call(Seq, DispatchEvent);
         }
-        
+        EditChecks(Seq);
     }
-
-    // Update is called once per frame
-    void Update ()
-    {
-	
-	}
 }

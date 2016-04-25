@@ -18,9 +18,4 @@ public class SetCursorLockStateOnEvent : OnEvent
     {
         Cursor.lockState = LockState;
     }
-
-    void OnDestroy()
-    {
-        
-    }
 }

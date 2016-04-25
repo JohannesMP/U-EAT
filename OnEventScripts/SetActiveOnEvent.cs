@@ -36,7 +36,7 @@ public class SetActiveOnEvent : OnEvent
         }
     }
 
-    void OnDestroy()
+    public override void OnDestroy()
     {
         
     }

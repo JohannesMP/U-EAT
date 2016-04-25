@@ -11,18 +11,23 @@ public class EditScaleOnEvent : EditOnEvent
     public float Duration = 1.0f;
     public Curve EasingCurve = Ease.Linear;
     
-    // Use this for initialization
-    ActionSequence Seq;
+
+    protected Transform TargetTransform;
+    protected ActionSequence Seq;
     public override void Awake()
     {
         base.Awake();
+        if (!TargetTransform)
+        {
+            TargetTransform = transform;
+        }
         if (Additive)
         {
             if (LocalScale)
             {
-                TargetScale.x *= gameObject.transform.localScale.x;
-                TargetScale.y *= gameObject.transform.localScale.y;
-                TargetScale.z *= gameObject.transform.localScale.z;
+                TargetScale.x *= TargetTransform.localScale.x;
+                TargetScale.y *= TargetTransform.localScale.y;
+                TargetScale.z *= TargetTransform.localScale.z;
             }
             //else
             //{
@@ -46,7 +51,7 @@ public class EditScaleOnEvent : EditOnEvent
         
         if (LocalScale)
         {
-            Action.Property(Seq, transform.GetProperty(o => o.localScale), TargetScale, Duration, EasingCurve);
+            Action.Property(Seq, TargetTransform.GetProperty(o => o.localScale), TargetScale, Duration, EasingCurve);
         }
         //else
         //{
@@ -55,10 +60,5 @@ public class EditScaleOnEvent : EditOnEvent
         //}
         
         EditChecks(Seq);
-    }
-
-    void OnDestroy()
-    {
-        
     }
 }

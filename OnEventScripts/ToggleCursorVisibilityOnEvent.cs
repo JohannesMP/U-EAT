@@ -17,9 +17,5 @@ public class ToggleCursorVisibilityOnEvent : OnEvent
         Cursor.visible = !Cursor.visible;
     }
 
-    void OnDestroy()
-    {
-
-    }
 }
 

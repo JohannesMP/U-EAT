@@ -26,9 +26,5 @@ public class SetCursorTextureOnEvent : OnEvent
         Cursor.SetCursor(CursorTexture, TextureOffset, CursorMode);
     }
 
-    void OnDestroy()
-    {
-
-    }
 }
 

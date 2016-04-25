@@ -114,7 +114,7 @@ public class OnEvent : MonoBehaviour
         DispatchTarget.DispatchEvent(DispatchEventName, Data);
     }
 
-    public void OnDestroy()
+    public virtual void OnDestroy()
     {
         //EventSystem.RemoveNullObjects();
         //ListenTarget.Disconnect(ListenEventName, OnEventInternal);
@@ -131,7 +131,7 @@ namespace CustomInspector
     [CustomEditor(typeof(OnEvent), true)]
     public class OnEventEditor : Editor
     {
-        
+        protected Dictionary<Type, System.Action> EditorDrawFunctions = new Dictionary<Type, System.Action>();
         SerializedProperty ListenEventProp;
         SerializedProperty ListenTargetProp;
         SerializedProperty DispatchEventProp;
@@ -143,6 +143,7 @@ namespace CustomInspector
 
         public virtual void OnEnable()
         {
+            EditorDrawFunctions.Add(typeof(OnEvent), Draw);
             OnEvent comp = target as OnEvent;
             if (comp.ListenTarget == null)
             {
@@ -196,14 +197,34 @@ namespace CustomInspector
 
         public override void OnInspectorGUI()
         {
-            //(target as OnEvent).Disconnect();
-            Draw();
-            if(target.GetType() != typeof(OnEvent))
+            DrawEverything();
+        }
+
+        public void DrawEverything()
+        {
+            var funcs = new Stack<Type>();
+            var type = target.GetType();
+            while (type != typeof(OnEvent))
             {
-                this.DrawBaseDefaultInspector();
+                
+                funcs.Push(type);
+                type = type.BaseType;
+            }
+            funcs.Push(type);
+
+            while(funcs.Count != 0)
+            {
+                type = funcs.Pop();
+                if(EditorDrawFunctions.ContainsKey(type))
+                {
+                    EditorDrawFunctions[type]();
+                }
+                else
+                {
+                    this.DrawDefaultInspector(type);
+                }
             }
             serializedObject.ApplyModifiedProperties();
-            //(target as OnEvent).Connect();
         }
 
         public void Draw()

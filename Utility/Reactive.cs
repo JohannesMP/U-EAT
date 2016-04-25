@@ -6,7 +6,11 @@ using UnityEngine;
 
 public class Reactive : MonoBehaviour
 {
-    public bool Active = true;
+    public bool Active
+    {
+        get { return enabled; }
+        set { enabled = value; }
+    }
     public bool MouseEvents = true;
     public bool InstantiationEvents = true;
     public bool UpdateEvents = false;
