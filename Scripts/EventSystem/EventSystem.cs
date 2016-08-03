@@ -27,6 +27,7 @@ public static class EventSystem
         if (!targetHandler)
         {
             targetHandler = target.AddComponent<EventHandler>();
+            targetHandler.Hide();
         }
         targetHandler.EventConnect(eventName, func);
     }

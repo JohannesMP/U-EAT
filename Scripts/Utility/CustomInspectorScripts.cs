@@ -109,7 +109,6 @@ namespace CustomInspector
                     if (prop != null)
                     {
                         EditorGUILayout.PropertyField(prop);
-
                         if (prop.isArray && prop.isExpanded)
                         {
                             while (prop.NextVisible(true))
@@ -133,7 +132,7 @@ namespace CustomInspector
                     ExposeProperty(me, i as PropertyInfo);
                 }
             }
-
+            me.serializedObject.ApplyModifiedProperties();
         }
 
         static readonly object[] EmptyObjectArray = new object[] { };
@@ -365,7 +364,6 @@ namespace CustomInspector
                     }
                     break;
             }
-            me.serializedObject.ApplyModifiedProperties();
             GUI.enabled = true;
         }
 

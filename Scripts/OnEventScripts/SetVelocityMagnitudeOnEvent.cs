@@ -6,16 +6,11 @@ public class SetVelocityMagnitudeOnEvent : OnEvent
     public float VelocityMagnitude = 1.0f;
     // Use this for initialization
     Rigidbody2D Body2D;
-	void Start ()
+    public override void Start ()
     {
         Body2D = GetComponent<Rigidbody2D>();
 	}
 	
-	// Update is called once per frame
-	void Update ()
-    {
-        
-    }
 
     public override void OnEventFunc(EventData data)
     {

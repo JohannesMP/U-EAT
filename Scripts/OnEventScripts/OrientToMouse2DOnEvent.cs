@@ -9,11 +9,6 @@ public class OrientToMouse2DOnEvent : OnEvent
     public float Offset = 0.0f;
     public float LerpSpeed = 100f;
 
-	void Start ()
-    {
-	    
-	}
-	
 	// Update is called once per frame
 	public override void OnEventFunc (EventData data)
     {

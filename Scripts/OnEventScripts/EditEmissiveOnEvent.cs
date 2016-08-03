@@ -11,8 +11,8 @@ public class EditEmissiveOnEvent : EditOnEvent
     [HideInInspector]
     public Vector4 StartingColor { get; set; }
     Renderer ObjectRenderer;
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    public override void Start ()
     {
         ObjectRenderer = GetComponent<Renderer>();
         if (!ObjectRenderer)

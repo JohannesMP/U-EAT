@@ -9,7 +9,6 @@ using System;
 public class OnEvent : MonoBehaviour
 {
     public EventData Data = new EventData();
-    [SerializeField]
     Action<EventData> OnEventFunctionProp;
     public Action<EventData> OnEventFunction
     {
@@ -23,6 +22,7 @@ public class OnEvent : MonoBehaviour
             Reconnect();
         }
     }
+    [ExposeProperty]
     public bool Active
     {
         get
@@ -64,7 +64,7 @@ public class OnEvent : MonoBehaviour
             Reconnect();
         }
     }
-
+    public bool IsConnected { get; private set; }
     public bool DispatchEvents = false;
     [SerializeField]
     Events DispatchEventNameProp = Events.DefaultEvent;
@@ -106,35 +106,47 @@ public class OnEvent : MonoBehaviour
 
     public virtual void Awake()
     {
-        if (ListenTarget == null)
+        if(!IsConnected)
         {
-            ListenTarget = this.gameObject;
+            if (ListenTargetProp == null)
+            {
+                ListenTargetProp = gameObject;
+            }
+            if (OnEventFunctionProp == null)
+            {
+                OnEventFunctionProp = OnEventFunc;
+            }
+            Connect();
         }
-        if(OnEventFunction == null)
-        {
-            OnEventFunction = this.OnEventFunc;
-        }
-        Connect();
+    }
+
+    public virtual void Start()
+    {
     }
 
     public void Connect()
     {
+        IsConnected = true;
         ListenTarget.Connect(ListenEventName, OnEventInternal);
     }
 
     public void Disconnect()
     {
+        IsConnected = false;
         ListenTarget.Disconnect(ListenEventName, OnEventInternal);
-        
     }
 
     public void Reconnect(GameObject listenTarget = null, string eventName = null, System.Action<EventData> onEventFunc = null)
     {
-        ListenTarget.Disconnect(ListenEventName, OnEventInternal);
+        if(IsConnected)
+        {
+            ListenTarget.Disconnect(ListenEventName, OnEventInternal);
+        }
         if(listenTarget != null)
         {
             ListenTargetProp = listenTarget;
         }
+        
         if(eventName != null)
         {
             ListenEventNameProp = eventName;
@@ -143,6 +155,7 @@ public class OnEvent : MonoBehaviour
         {
             OnEventFunctionProp = onEventFunc;
         }
+        
         ListenTarget.Connect(ListenEventName, OnEventInternal);
     }
 
@@ -258,6 +271,7 @@ namespace CustomInspector
 
         public void Draw()
         {
+            
             var iter = serializedObject.GetIterator();
             //EditorGUILayout.PropertyField(iter);
             iter.NextVisible(true);

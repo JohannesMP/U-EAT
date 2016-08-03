@@ -26,7 +26,12 @@ public class EventHandler : MonoBehaviour
 
     void Awake()
     {
-        if(!IsVisibleInInspector)
+        Hide();
+    }
+
+    public void Hide()
+    {
+        if (!IsVisibleInInspector)
         {
             hideFlags = HideFlags.HideInInspector;
         }

@@ -8,12 +8,6 @@ public class SetCursorTextureOnEvent : OnEvent
     public Texture2D CursorTexture;
     public Vector2 TextureOffset = new Vector2();
     public CursorMode CursorMode = CursorMode.Auto;
-    
-
-    void Start()
-    {
-
-    }
 
 
     public override void OnEventFunc(EventData data)

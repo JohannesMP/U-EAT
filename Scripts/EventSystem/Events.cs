@@ -63,8 +63,7 @@ public class Events
     public static readonly String OnBecameVisible = "OnBecameVisible";
     public static readonly String OnBecameInvisible = "OnBecameInvisible";
 
-    public static readonly String LightOff = "LightOff";
-    public static readonly String LightOn = "LightOn";
+    public static readonly String Stuck = "Stuck";
 
     public static readonly String ValidateText = "ValidateTextEvent";
     public static readonly String LoadNextLevel = "LoadNextLevel";

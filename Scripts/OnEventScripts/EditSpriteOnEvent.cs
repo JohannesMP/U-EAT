@@ -9,8 +9,8 @@ public class EditSpriteOnEvent : OnEvent
     //public Curve EasingCurve = Ease.Linear;
 
     SpriteRenderer Renderer;
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    public override void Start ()
     {
         Renderer = GetComponent<SpriteRenderer>();
     }

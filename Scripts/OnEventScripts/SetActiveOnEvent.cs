@@ -14,12 +14,6 @@ public class SetActiveOnEvent : OnEvent
     public OnEvent TargetComp;
     public ActiveState State = ActiveState.Active;
 
-    void Start()
-    {
-        
-    }
-
-
     public override void OnEventFunc(EventData data)
     {
         if(TargetComp != null)
@@ -34,10 +28,5 @@ public class SetActiveOnEvent : OnEvent
             }
             
         }
-    }
-
-    public void OnDestroy()
-    {
-        
     }
 }

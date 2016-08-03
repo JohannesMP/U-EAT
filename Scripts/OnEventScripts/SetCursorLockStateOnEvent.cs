@@ -8,11 +8,6 @@ public class SetCursorLockStateOnEvent : OnEvent
 
     public CursorLockMode LockState = CursorLockMode.None;
 
-    void Start()
-    {
-        
-    }
-
 
     public override void OnEventFunc(EventData data)
     {

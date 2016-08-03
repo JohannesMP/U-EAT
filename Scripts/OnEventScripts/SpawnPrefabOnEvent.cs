@@ -9,10 +9,10 @@ public class SpawnPrefabOnEvent : OnEvent
     public Vector3 SpawnPosition = new Vector3();
     public GameObject Parent = null;
 	// Use this for initialization
-	public override void Awake ()
-    {
-        base.Awake();
-	}
+	//public override void Awake ()
+ //   {
+ //       base.Awake();
+	//}
 
     public override void OnEventFunc(EventData data)
     {

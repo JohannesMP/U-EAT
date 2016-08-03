@@ -6,12 +6,6 @@ public class LoadSceneOnEvent : OnEvent
 {
     public string SceneName;
     public LoadSceneMode SceneMode = LoadSceneMode.Single;
-	// Use this for initialization
-	public override void Awake ()
-    {
-        base.Awake();
-        
-	}
 
     public override void OnEventFunc(EventData data)
     {

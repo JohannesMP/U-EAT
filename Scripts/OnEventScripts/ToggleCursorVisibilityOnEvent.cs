@@ -6,11 +6,6 @@ using System.Collections.Generic;
 public class ToggleCursorVisibilityOnEvent : OnEvent
 {
 
-    void Start()
-    {
-
-    }
-
 
     public override void OnEventFunc(EventData data)
     {
