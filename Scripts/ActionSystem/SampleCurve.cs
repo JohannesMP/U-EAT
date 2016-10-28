@@ -230,6 +230,7 @@ namespace ActionSystem
 namespace CustomInspector
 {
     using ActionSystem;
+    using System.Reflection;
     using UnityEditor;
     [CanEditMultipleObjects]
     [CustomPropertyDrawer(typeof(Curve), true)]
@@ -256,7 +257,7 @@ namespace CustomInspector
         }
 
         [ExposeDrawMethod]
-        static public Curve Draw(Rect position, object curveObj, GUIContent label)
+        static public Curve Draw(Rect position, object curveObj, GUIContent label, ICustomAttributeProvider info = null)
         {
             Curve curve = curveObj as Curve;
             var labelRect = new Rect(position.x, position.y, InspectorValues.LabelWidth, position.height);
@@ -264,9 +265,9 @@ namespace CustomInspector
             EditorGUI.LabelField(labelRect, label);
             //EditorGUILayout.PrefixLabel(label);
             var propStartPos = labelRect.position.x + labelRect.width;
-            if (position.width > InspectorValues.MinRectWidth)
+            if (position.width > InspectorValues.MinWidthBeforeClip)
             {
-                propStartPos += (position.width - InspectorValues.MinRectWidth) / InspectorValues.WidthScaler;
+                propStartPos += (position.width - InspectorValues.MinWidthBeforeClip) / InspectorValues.WidthScaler;
             }
 
             var toggleRect = new Rect(propStartPos, position.y, ToggleWidth, position.height);

@@ -6,15 +6,17 @@ public class SetTimeScaleOnEvent : OnEvent
 {
     [Range(0, 100)]
     public float TimeScale = 0;
-
+    public TimeScaleTypes TimeScaleType = TimeScaleTypes.GameTimeScale;
     public override void OnEventFunc(EventData data)
     {
-        Time.timeScale = TimeScale;
+        if(TimeScaleType == TimeScaleTypes.GameTimeScale)
+        {
+            Time.timeScale = TimeScale;
+        }
+        else
+        {
+            Game.GameTimeScale = TimeScale;
+        }
+        
     }
-
-    // Update is called once per frame
-    void Update ()
-    {
-	    
-	}
 }

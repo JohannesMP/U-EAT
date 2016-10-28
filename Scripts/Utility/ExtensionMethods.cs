@@ -237,5 +237,12 @@ public static class ExtensionMethods
             }
         }
     }
+
+    static public void LookAt2D(this Transform me, Transform target, float angleOffset = 0)
+    {
+        var aimVec = me.position - target.position;
+        aimVec = new Vector3(me.eulerAngles.x, me.eulerAngles.y, Mathf.Atan2(aimVec.y, aimVec.x) * 180 / Mathf.PI + angleOffset);
+        me.eulerAngles = aimVec;
+    }
 }
 

@@ -3,13 +3,14 @@ using System.Collections;
 using ActionSystem;
 using System.Collections.Generic;
 
-public class EditFOVOnEvent : EditOnEvent
+public class EditCameraSizeOnEvent : EditOnEvent
 {
+    public Camera TargetCamera;
     public bool Additive = false;
-    public float TargetFOV = 60;
+    public float TargetSize = 10;
     public float Duration = 1.0f;
     public Curve EasingCurve = Ease.Linear;
-    protected Camera TargetCamera;
+    
     protected ActionSequence Seq;
 
     public override void Awake()
@@ -23,10 +24,7 @@ public class EditFOVOnEvent : EditOnEvent
         Seq = Action.Sequence(Actions);
         
         
-        if(Additive)
-        {
-            TargetFOV += TargetCamera.fieldOfView;
-        }
+        
     }
 
     public override void OnEventFunc(EventData data)
@@ -36,7 +34,12 @@ public class EditFOVOnEvent : EditOnEvent
             Seq = Action.Sequence(Actions);
             
         }
-        Action.Property(Seq, TargetCamera.GetProperty(cam => cam.fieldOfView), TargetFOV, Duration, EasingCurve);
+        var targetSize = TargetSize;
+        if (Additive)
+        {
+             targetSize = TargetSize + TargetCamera.orthographicSize;
+        }
+        Action.Property(Seq, TargetCamera.GetProperty(cam => cam.orthographicSize), targetSize, Duration, EasingCurve);
         EditChecks(Seq);
     }
 

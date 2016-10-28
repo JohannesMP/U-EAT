@@ -7,6 +7,7 @@ public class EditPositionOtherOnEvent : EditPositionOnEvent
 {
     public GameObject TargetObject;
     public bool AdditiveSelf = false;
+    
     //USE START NOT AWAKE
     public override void Awake()
     {

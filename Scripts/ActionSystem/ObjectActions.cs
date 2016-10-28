@@ -20,21 +20,66 @@ using ActionSystem;
 
 public class ObjectActions : MonoBehaviour
 {
+    [CustomNames(new string[] { "UseTimeScale", "UsePaused" }, false, EditorNameFlags.None)]
+    public Boolean2 UseGameTimeScaleOrPaused = new Boolean2(false, false);
+    public bool UseGameTimeScale { get { return UseGameTimeScaleOrPaused.x; } set { UseGameTimeScaleOrPaused.x = value; } }
+    public bool UseGamePaused { get { return UseGameTimeScaleOrPaused.y; } set { UseGameTimeScaleOrPaused.y = value; } }
     const bool IsVisibleInInspector = false;
     public ActionGroup Actions = new ActionGroup();
-	
-    void Awake()
+    float TimeScaleProp = 1;
+    public float TimeScale
+    {
+        get
+        {
+            return TimeScaleProp;
+        }
+        set
+        {
+            TimeScaleProp = value;
+        }
+    }
+    void Start()
     {
         if (!IsVisibleInInspector)
         {
             hideFlags = HideFlags.HideInInspector;
+        }
+        Game.GameSession.Connect("PausedStateChanged", OnPausedStateChanged);
+        Game.GameSession.Connect("TimeScaleChanged", OnTimeScaleChanged);
+        if(UseGameTimeScale)
+        {
+            TimeScale = Game.GameTimeScale;
+        }
+    }
+
+    void OnPausedStateChanged(EventData data)
+    {
+        if (!UseGamePaused)
+        {
+            return;
+        }
+        if (Game.Paused)
+        {
+            Actions.Pause();
+        }
+        else
+        {
+            Actions.Resume();
+        }
+    }
+
+    void OnTimeScaleChanged(EventData data)
+    {
+        if(UseGameTimeScale)
+        {
+            TimeScale = Game.GameTimeScale;
         }
     }
 
 	// Update is called once per frame
 	void Update()
     {
-        Actions.Update(Time.smoothDeltaTime);
+        Actions.Update(Time.smoothDeltaTime * TimeScale);
 	}
 }
 
@@ -50,12 +95,12 @@ public static class ActionExtensions
         return me.GetOrAddComponent<ObjectActions>().Actions;
     }
 
-    public static T GetOrAddComponent<T>(this MonoBehaviour me) where T : Behaviour
+    public static T GetOrAddComponent<T>(this MonoBehaviour me) where T : Component
     {
         return me.gameObject.GetOrAddComponent<T>();
     }
 
-    public static T GetOrAddComponent<T>(this GameObject me) where T : Behaviour
+    public static T GetOrAddComponent<T>(this GameObject me) where T : Component
     {
         var comp = me.GetComponent<T>();
         if (comp == null)

@@ -25,16 +25,12 @@ public class EditColorOnEvent : EditOnEvent
             {
                 DispatchEvent();
             }
+            return;
         }
         var Seq = Action.Sequence(Actions);
         Action.Property(Seq, Renderer.GetProperty(o => o.color), TargetColor, Duration, EasingCurve);
         EditChecks(Seq);
     }
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
 
 
 }

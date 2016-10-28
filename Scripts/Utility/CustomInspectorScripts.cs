@@ -1,11 +1,9 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Reflection;
-using ActionSystem;
-using System.Collections;
 using System.Linq;
 using System.Text;
 
@@ -23,7 +21,7 @@ namespace CustomInspector
         public static Func<Type, Type> GetDrawerTypeForType;
 
         //Add a function with the type that is being drawn for as the key and the draw function as the value in order for that type to be drawn when exposing a property.
-        public static Dictionary<Type, Func<Rect, object, GUIContent, object>> TypeDrawFunctions = new Dictionary<Type, Func<Rect, object, GUIContent, object>>();
+        public static Dictionary<Type, Func<Rect, object, GUIContent, ICustomAttributeProvider, object>> TypeDrawFunctions = new Dictionary<Type, Func<Rect, object, GUIContent, ICustomAttributeProvider, object>>();
 
         static CustomInspectorScripts()
         {
@@ -43,7 +41,7 @@ namespace CustomInspector
                         {
                             throw new Exception("Method of with the 'ExposeDrawMethod' attribute must have a return type.");
                         }
-                        var func = (Func<Rect, object, GUIContent, object>)Delegate.CreateDelegate(typeof(Func<Rect, object, GUIContent, object>), method);
+                        var func = (Func<Rect, object, GUIContent, ICustomAttributeProvider, object>)Delegate.CreateDelegate(typeof(Func<Rect, object, GUIContent, ICustomAttributeProvider, object>), method);
                         TypeDrawFunctions.Add(method.ReturnType, func);
                     }
                 }
@@ -353,7 +351,7 @@ namespace CustomInspector
                             var val = info.GetGetMethod().Invoke(me.target, EmptyObjectArray);
                             var contentName = new GUIContent();
                             contentName.text = name;
-                            val = TypeDrawFunctions[info.PropertyType](rect, val, contentName);
+                            val = TypeDrawFunctions[info.PropertyType](rect, val, contentName, info);
                             if (info.CanWrite)
                             {
                                 info.SetValue(me.target, val, EmptyObjectArray);
@@ -476,7 +474,7 @@ namespace CustomInspector
         }
     } 
 }
-
+#endif
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
 //Allows the property to be visible and editable in the inspector.
 public class ExposeProperty : Attribute
@@ -488,7 +486,7 @@ public class ExposeProperty : Attribute
 public class ExposeDrawMethod : Attribute
 {
 }
-#endif
+
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 public sealed class OrderAttribute : Attribute
