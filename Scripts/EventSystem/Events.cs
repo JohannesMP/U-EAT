@@ -202,17 +202,7 @@ public class GameObjectEvent : EventData
     {
         return new GameObjectEvent(value);
     }
-}
 
-    }
-    public static implicit operator bool(BoolEvent value)
-    {
-        return value.Value;
-    }
-    public static implicit operator BoolEvent(bool value)
-    {
-        return new BoolEvent(value);
-    }
 }
 
 public class CollisionEvent2D : EventData
