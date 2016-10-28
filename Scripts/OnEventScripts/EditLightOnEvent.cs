@@ -3,6 +3,22 @@ using System.Collections;
 using ActionSystem;
 public class EditLightOnEvent : EditOnEvent
 {
+    [ExposeProperty]
+    public Vector3 TestProp
+    {
+        get
+        {
+            return transform.position;
+        }
+        set
+        {
+            if(value.x >= 15)
+            {
+                value.x = 15;
+            }
+            transform.position = value;
+        }
+    }
     public float Intensity = 1.0f;
     public float Duration = 1.0f;
     public Curve EasingCurve = new Ease();

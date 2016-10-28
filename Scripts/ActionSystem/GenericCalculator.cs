@@ -16,6 +16,7 @@ instead.
 /****************************************************************************/
 using System;
 using System.Linq.Expressions;
+using UnityEngine;
 
 public static class GenericCalculator<T1, T2, TResult>
 {
@@ -26,6 +27,8 @@ public static class GenericCalculator<T1, T2, TResult>
 
     static GenericCalculator()
     {
+#if UNITY_WEBGL
+#else
         var leftType = typeof(T1);
         var rightType = typeof(T2);
         ParameterExpression leftVal = Expression.Parameter(leftType, "leftVal");
@@ -60,6 +63,14 @@ public static class GenericCalculator<T1, T2, TResult>
         }
         catch (InvalidOperationException) { }
         catch (ArgumentException) { }
+        //Debug.Log("##################################################");
+        //Debug.Log("GenericCalculator<" + typeof(T1).Name + ", " + typeof(T2) + ", " + typeof(TResult) + ">");
+        //Debug.Log("AddFunc = " + AddFunc);
+        //Debug.Log("SubFunc = " + SubtractFunc);
+        //Debug.Log("MultFunc = " + MultiplyFunc);
+        //Debug.Log("DivFunc = " + DivideFunc);
+        //Debug.Log("##################################################");
+#endif
     }
 
     static public TResult Add(T1 lhs, T2 rhs)

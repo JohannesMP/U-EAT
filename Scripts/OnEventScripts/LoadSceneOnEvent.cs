@@ -4,7 +4,32 @@ using UnityEngine.SceneManagement;
 
 public class LoadSceneOnEvent : OnEvent
 {
-    public string SceneName;
+#if UNITY_EDITOR
+    [ExposeProperty]
+    public UnityEditor.SceneAsset SceneToLoad
+    {
+        get
+        {
+            return SceneToLoadProp;
+        }
+        set
+        {
+            SceneToLoadProp = value;
+            if(value)
+            {
+                SceneName = SceneToLoad.name;
+            }
+            else
+            {
+                SceneName = "";
+            }
+        }
+    }
+    [SerializeField]
+    UnityEditor.SceneAsset SceneToLoadProp;
+#endif
+    [SerializeField]
+    string SceneName;
     public LoadSceneMode SceneMode = LoadSceneMode.Single;
 
     public override void OnEventFunc(EventData data)

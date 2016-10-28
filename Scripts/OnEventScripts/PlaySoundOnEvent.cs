@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ActionSystem;
+using System;
+
 public class PlaySoundOnEvent : EditOnEvent
 {
     public AudioClip SoundClip = null;
@@ -10,6 +12,10 @@ public class PlaySoundOnEvent : EditOnEvent
     ActionGroup Grp;
     AudioSource Source;
 	// Use this for initialization
+    public PlaySoundOnEvent()
+    {
+        
+    }
 	public override void Awake()
     {
         base.Awake();
@@ -20,31 +26,41 @@ public class PlaySoundOnEvent : EditOnEvent
 
     public override void OnEventFunc(EventData data)
     {
-        if(!Active)
+        if (!Active)
         {
             return;
         }
-
+        
         Source.clip = SoundClip;
-        var Seq = Action.Sequence(Grp);
-        Action.Delay(Seq, Delay);
+        var Seq = ActionSystem.Action.Sequence(Grp);
+        if(Delay > 0)
+        {
+            ActionSystem.Action.Delay(Seq, Delay);
+        }
+        
         if(SoundClip)
         {
-            Action.Call(Seq, Source.Play);
+            ActionSystem.Action.Call(Seq, Source.Play);
         }
         else
         {
-            Action.Call(Seq, Source.Stop);
+            ActionSystem.Action.Call(Seq, Source.Stop);
         }
         if(DispatchOnFinish)
         {
             if(SoundClip)
             {
-                Action.Delay(Seq, SoundClip.length);
+                ActionSystem.Action.Delay(Seq, SoundClip.length);
             }
-            
-            Action.Call(Seq, DispatchEvent);
+
+            ActionSystem.Action.Call(Seq, DispatchEvent);
         }
         EditChecks(Seq);
     }
+}
+
+[Serializable]
+public struct AudioSettings
+{
+
 }

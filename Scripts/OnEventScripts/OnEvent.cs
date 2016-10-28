@@ -56,6 +56,10 @@ public class OnEvent : MonoBehaviour
     {
         get
         {
+            if(ListenTargetProp == null)
+            {
+                ListenTargetProp = gameObject;
+            }
             return ListenTargetProp;
         }
         set
@@ -314,7 +318,6 @@ namespace CustomInspector
                 this.ExposeProperty(DispatchEventNameProp);
                 this.ExposeProperty(DispatchTargetProp);
             }
-
             
         }
     }

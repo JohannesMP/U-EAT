@@ -69,6 +69,19 @@ public class Reactive : MonoBehaviour
         gameObject.DispatchEvent(Events.MouseExit);
     }
 
+    void OnMouseUpAsButton()
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!MouseEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.MouseUpAsButton);
+    }
+
     void OnMouseUp()
     {
         if (!Active)
@@ -202,47 +215,45 @@ public class Reactive : MonoBehaviour
         
     }
 
-    //void OnTriggerEnter2D(Collision2D collision)
-    //{
-    //    if (!Active)
-    //    {
-    //        return;
-    //    }
-    //    if (!CollisionEvents)
-    //    {
-    //        return;
-    //    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
 
-    //    gameObject.DispatchEvent(Events.OnCollisionEnter2D, new CollisionEvent2D(collision));
+        gameObject.DispatchEvent(Events.OnCollisionEnter2D, new CollisionEvent2D(collision));
+    }
 
-    //}
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionExit2D, new CollisionEvent2D(collision));
+    }
 
-    //void OnTriggerExit2D(Collision2D collision)
-    //{
-    //    if (!Active)
-    //    {
-    //        return;
-    //    }
-    //    if (!CollisionEvents)
-    //    {
-    //        return;
-    //    }
-    //    gameObject.DispatchEvent(Events.OnCollisionExit2D, new CollisionEvent2D(collision));
-    //}
-
-    //void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if (!Active)
-    //    {
-    //        return;
-    //    }
-    //    if (!CollisionEvents)
-    //    {
-    //        return;
-    //    }
-    //    gameObject.DispatchEvent(Events.OnCollisionStay2D, new CollisionEvent2D(collision));
-
-    //}
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!CollisionEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.OnCollisionStay2D, new CollisionEvent2D(collision));
+    }
 
     void OnCollisionEnter(Collision collision)
     {

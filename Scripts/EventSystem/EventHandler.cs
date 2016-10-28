@@ -113,7 +113,8 @@ public class EventHandler : MonoBehaviour
             else
             {
                 //Remove any invalid functions.
-                functionList.RemoveAt(i);
+                functionList[i] = functionList[functionList.Count - 1];
+                functionList.RemoveAt(functionList.Count - 1);
                 --i;
             }
         }

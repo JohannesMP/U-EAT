@@ -1,16 +1,74 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
+using UnityEditor;
+[InitializeOnLoad]
 #endif
 
 public class Game : MonoBehaviour
 {
+    static public bool Paused
+    {
+        get
+        {
+            return PausedProp;
+        }
+        set
+        {
+            if(value != PausedProp)
+            {
+                PausedProp = value;
+                GameSession.DispatchEvent("PausedStateChanged");
+            }
+        }
+    }
+    static public bool GameWasPaused { get; private set; }
+    static public bool GameWasPlaying { get; private set; }
+    static public bool ShiftWasDown = false;
+    static bool PausedProp = false;
+    static float TimeScaleProp = 1;
+    Game()
+    {
+#if UNITY_EDITOR
+        EditorApplication.update += GlobalUpdate;
+#endif
+    }
+    static public float GameTimeScale
+    {
+        get
+        {
+            return TimeScaleProp;
+        }
+        set
+        {
+            TimeScaleProp = value;
+            GameSession.DispatchEvent("TimeScaleChanged");
+        }
+    }
+    [ExposeProperty]
+    public float TimeScale
+    {
+        get
+        {
+            return TimeScaleProp;
+        }
+        set
+        {
+            TimeScaleProp = value;
+        }
+    }
     public static GameObject GameSession { get; private set; }
     static Game GameComp { get; set; }
     static GameObject GameEventHandler { get; set; }
 
     static GameObject HandlerResource;
+
+    static Game()
+    {
+    }
+
     static void InitializeGame()
     {
         GameSession = Resources.Load<GameObject>("Prefabs/GameSession");
@@ -26,7 +84,8 @@ public class Game : MonoBehaviour
         }
         //GameSession.Connect(Events.Create, GameComp.OnGameCreate);
         //GameSession.Connect(Events.Initialize, GameComp.OnGameInitialize);
-        //GameSession.Connect(Events.LogicUpdate, GameComp.OnGameLogicUpdate);
+        GameSession.Connect(Events.LogicUpdate, GameComp.OnLogicUpdate);
+        //GameSession.Connect(Events.LateUpdate, GameComp.OnGameLateUpdate);
         //GameSession.Connect(Events.Destroy, GameComp.OnGameDestroy);
 
         HandlerResource = Resources.Load<GameObject>("Prefabs/GameEventHandler");
@@ -57,13 +116,24 @@ public class Game : MonoBehaviour
     //    Debug.Log("Game Initialized");
     //}
 
-    //void OnGameLogicUpdate(EventData data)
-    //{
-    //    Debug.Log("Game Updating");
-    //}
+    void GlobalUpdate()
+    {
+        GameWasPlaying = Application.isPlaying;
+    }
 
+    void OnLogicUpdate(EventData data)
+    {
+        GameWasPaused = Paused;
+    }
+
+
+    //~Game()
+    //{
+    //    //GameSession.Disconnect(Events.LateUpdate, GameComp.OnGameLateUpdate);
+    //}
     //void OnGameDestroy(EventData data)
     //{
     //    Debug.Log("Game Quitting");
     //}
 }
+

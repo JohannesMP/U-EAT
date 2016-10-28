@@ -50,7 +50,7 @@ public class DispatchEventOnInput : MonoBehaviour
     // Use this for initialization
     void Awake ()
     {
-	    if(TargetObject.Equals(null))
+	    if(TargetObject == null)
         {
             TargetObject = gameObject;
         }
@@ -128,7 +128,6 @@ namespace CustomInspector
         {
             this.DrawDefaultInspector(target.GetType(), true);
             ChooseInputList();
-            
         }
 
         void ChooseInputList()
@@ -136,7 +135,7 @@ namespace CustomInspector
             if(InputNames.Length == 0)
             {
                 return;
-            }
+            }  
             var obj = target as DispatchEventOnInput;
             if(obj.TargetObject == null)
             {
@@ -149,6 +148,7 @@ namespace CustomInspector
             obj.Input = InputLists[EditorGUI.Popup(rect, "Input", obj.InputIndex, InputNames)];
             obj.InputIndex = InputLists.IndexOf(obj.Input);
             EditorGUILayout.EndHorizontal();
+            serializedObject.ApplyModifiedProperties();
             //Debug.Log(InputLists.IndexOf(obj.Input));
         }
     }

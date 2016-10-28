@@ -25,6 +25,7 @@ public class Events
     public static readonly String DefaultEvent = "DefaultEvent";
     public static readonly String KeyboardEvent = "KeyboardEvent";
     public static readonly String MouseUp = "MouseUp";
+    public static readonly String MouseUpAsButton = "MouseAsButton";
     public static readonly String MouseDown = "MouseDown";
     public static readonly String MouseEnter = "MouseEnter";
     public static readonly String MouseExit = "MouseExit";
@@ -63,15 +64,18 @@ public class Events
     public static readonly String OnBecameVisible = "OnBecameVisible";
     public static readonly String OnBecameInvisible = "OnBecameInvisible";
 
-    public static readonly String Stuck = "Stuck";
-
-    public static readonly String ValidateText = "ValidateTextEvent";
+    //Gameplay
     public static readonly String LoadNextLevel = "LoadNextLevel";
-    public static readonly String SpawnExitButton = "SpawnExitButton";
-    public static readonly String MouseAppear = "MouseAppear";
-    public static readonly String IndexAppear = "IndexAppear";
-    public static readonly String IndexDisappear = "IndexDisappear";
-    public static readonly String SpawnOptionsButton = "SpawnOptionsButton";
+    public static readonly String Attacked = "Attacked";
+    public static readonly String AttackFinished = "AttackFinished";
+    public static readonly String Damage = "Damage";
+    public static readonly String Killed = "Killed";
+
+    public static readonly String KeyUp = "KeyUp";
+    public static readonly String KeyDown = "KeyDown";
+    public static readonly String OnScroll = "OnScroll";
+    public static readonly String MouseDragStarted = "MouseDragStarted";
+    public static readonly String MouseDragEnded = "MouseDragEnded";
 
 #if UNITY_EDITOR
     //Whether or not to display a text input box or a dropdown menu.
@@ -79,7 +83,9 @@ public class Events
 #endif
     //Nonstatic
     public string EventName = DefaultEvent;
-    public Events() { }
+    public Events()
+    {
+    }
     public Events(string eventName)
     {
         EventName = eventName;
@@ -162,13 +168,77 @@ public class StringEvent : EventData
         return new StringEvent(value);
     }
 }
+public class BoolEvent : EventData
+{
+    public bool Value;
+    public BoolEvent(bool boolValue = false)
+    {
+        Value = boolValue;
+
+    }
+    public static implicit operator bool(BoolEvent value)
+    {
+        return value.Value;
+    }
+    public static implicit operator BoolEvent(bool value)
+    {
+        return new BoolEvent(value);
+    }
+}
+
+public class GameObjectEvent : EventData
+{
+    public GameObject Value;
+    public GameObjectEvent(GameObject objectValue = null)
+    {
+        Value = objectValue;
+
+    }
+    public static implicit operator bool(GameObjectEvent value)
+    {
+        return value.Value;
+    }
+    public static implicit operator GameObjectEvent(GameObject value)
+    {
+        return new GameObjectEvent(value);
+    }
+}
 
 public class CollisionEvent2D : EventData
 {
-    public Collision2D StoredCollision;
+    Collider2D StoredColliderProp = null;
+    Collision2D StoredCollisionProp = null;
+    public bool IsTriggerEvent { get; private set; }
+    public Collision2D StoredCollision
+    {
+        get
+        {
+            if(IsTriggerEvent)
+            {
+                return null;
+            }
+            return StoredCollisionProp;
+        }
+    }
+    public Collider2D StoredCollider
+    {
+        get
+        {
+            return StoredColliderProp;
+        }
+    }
+
+
     public CollisionEvent2D(Collision2D collision = null)
     {
-        StoredCollision = collision;
+        IsTriggerEvent = false;
+        StoredCollisionProp = collision;
+        StoredColliderProp = collision.collider;
+    }
+    public CollisionEvent2D(Collider2D collision)
+    {
+        IsTriggerEvent = true;
+        StoredColliderProp = collision;
     }
 
     public static implicit operator Collision2D(CollisionEvent2D value)
@@ -177,6 +247,16 @@ public class CollisionEvent2D : EventData
     }
 
     public static implicit operator CollisionEvent2D(Collision2D value)
+    {
+        return new CollisionEvent2D(value);
+    }
+
+    public static implicit operator Collider2D(CollisionEvent2D value)
+    {
+        return value.StoredCollider;
+    }
+
+    public static implicit operator CollisionEvent2D(Collider2D value)
     {
         return new CollisionEvent2D(value);
     }
@@ -206,6 +286,7 @@ public class CollisionEvent3D : EventData
 #if UNITY_EDITOR
 namespace CustomInspector
 {
+    using System.Reflection;
     using System.Text;
     using UnityEditor;
     //Custom values for how the property scales when the inspector is resized.
@@ -215,14 +296,22 @@ namespace CustomInspector
         //The width of an average text label.
         public static readonly float LabelWidth = 120;
         //The minimum possible width before clipping will occur.
-        public static readonly float MinRectWidth = 340;
+        public static readonly float MinWidthBeforeClip = 340;
         //How fast the property scales with the width of the window.
         public static readonly float WidthScaler = 2.21f;
         //The general amount of padding from the inner edge of the inspector. (Towards the center of the screen)
-        public static readonly float EdgePadding = 14;
+        public static readonly float EdgePadding = 15;
+        //The point at which a vector switches from a multi-line element to a single-line element.
+        public static readonly float MultiLineToggle = 315;
+        //The size of an inspector indent.
+        public static readonly float Indent = 10;
+        //The smallest the inspector can be scaled to.
+        public static readonly float MinInspectorWidth = 258;
+        //A nice minimum width for elements
+        public static readonly float MinElementWidth = 160;
     }
     
-    [CustomPropertyDrawer(typeof(Events))]
+    [CustomPropertyDrawer(typeof(Events))][CanEditMultipleObjects]
     public class EventPropertyDrawer : PropertyDrawer
     {
         //The names of all the events in the 'Events' class.
@@ -265,7 +354,7 @@ namespace CustomInspector
         }
 
         [ExposeDrawMethod]
-        static public Events Draw(Rect position, object eventsObj, GUIContent content)
+        static public Events Draw(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
         {
             Events events = eventsObj as Events;
             var labelRect = new Rect(position.x, position.y, InspectorValues.LabelWidth, position.height);
@@ -273,9 +362,9 @@ namespace CustomInspector
             
             //Split up the property drawer into rectangles.
             var propStartPos = labelRect.position.x + labelRect.width;
-            if (position.width > InspectorValues.MinRectWidth)
+            if (position.width > InspectorValues.MinWidthBeforeClip)
             {
-                propStartPos += (position.width - InspectorValues.MinRectWidth) / InspectorValues.WidthScaler;
+                propStartPos += (position.width - InspectorValues.MinWidthBeforeClip) / InspectorValues.WidthScaler;
             }
             labelRect.width = propStartPos - 15;
             EditorGUI.SelectableLabel(labelRect, content.text);
@@ -307,6 +396,7 @@ namespace CustomInspector
             {
                 events.EventName = EditorGUI.TextField(eventRect, events.EventName);
             }
+
             return events;
         }
     }

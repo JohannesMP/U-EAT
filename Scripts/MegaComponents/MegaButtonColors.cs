@@ -67,13 +67,13 @@ public class MegaButtonColors : MegaComponent
     [MegaRegister]
     public EditColorOnEvent MouseDownColorComp;
     // Use this for initialization
-    void Awake ()
+    void Start ()
     {
         var reactive = this.GetOrAddComponent<Reactive>();
         reactive.MouseEvents = true;
         MouseEnterColorComp.ListenEventName = Events.MouseEnter;
         MouseExitColorComp.ListenEventName = Events.MouseExit;
-        MouseUpColorComp.ListenEventName = Events.MouseUp;
+        MouseUpColorComp.ListenEventName = Events.MouseUpAsButton;
         MouseDownColorComp.ListenEventName = Events.MouseDown;
         MouseEnterColorComp.Duration = 0;
         MouseExitColorComp.Duration = 0;
