@@ -82,9 +82,10 @@ namespace CustomInspector
                     }
                 }
             }
-
-            foreach (var i in fields)
+            
+            for(var index = 0; index < fields.Length; ++index)
             {
+                var i = fields[index];
                 if (i.MemberType != MemberTypes.Property && i.MemberType != MemberTypes.Field)
                 {
                     continue;
@@ -101,12 +102,19 @@ namespace CustomInspector
                         continue;
                     }
                 }
+                bool readOnly = i.HasAttribute(typeof(ReadOnlyAttribute));
+                if (readOnly)
+                {
+                    GUI.enabled = false;
+                }
+
                 if (i.MemberType == MemberTypes.Field)
                 {
                     var prop = me.serializedObject.FindProperty(i.Name);
                     if (prop != null)
                     {
                         EditorGUILayout.PropertyField(prop);
+                        var depth = prop.depth + 1;
                         if (prop.isArray && prop.isExpanded)
                         {
                             while (prop.NextVisible(true))
@@ -114,6 +122,10 @@ namespace CustomInspector
                                 if (prop.depth == 0)
                                 {
                                     break;
+                                }
+                                else if(prop.depth > depth)
+                                {
+                                    continue;
                                 }
                                 EditorGUILayout.PropertyField(prop);
                             }
@@ -128,6 +140,10 @@ namespace CustomInspector
                     }
 
                     ExposeProperty(me, i as PropertyInfo);
+                }
+                if (readOnly)
+                {
+                    GUI.enabled = true;
                 }
             }
             me.serializedObject.ApplyModifiedProperties();
@@ -486,6 +502,13 @@ public class ExposeProperty : Attribute
 public class ExposeDrawMethod : Attribute
 {
 }
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+//Allows the property to be visible and editable in the inspector.
+public class ReadOnlyAttribute : Attribute
+{
+}
+
 
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]

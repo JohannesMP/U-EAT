@@ -15,6 +15,32 @@ public class LoadSceneOnEvent : OnEvent
         set
         {
             SceneToLoadProp = value;
+            if(value)
+            {
+                SceneName = SceneToLoad.name;
+            }
+            else
+            {
+                SceneName = "";
+            }
+        }
+    }
+    [SerializeField]
+    UnityEditor.SceneAsset SceneToLoadProp;
+#endif
+    [SerializeField]
+    string SceneName;
+#if UNITY_EDITOR
+    [ExposeProperty]
+    public UnityEditor.SceneAsset SceneToLoad
+    {
+        get
+        {
+            return SceneToLoadProp;
+        }
+        set
+        {
+            SceneToLoadProp = value;
             if (value)
             {
                 SceneName = SceneToLoad.name;

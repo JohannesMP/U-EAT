@@ -26,6 +26,56 @@ public class Game : MonoBehaviour
     }
     static public bool GameWasPaused { get; private set; }
     static public bool GameWasPlaying { get; private set; }
+    static public bool ShiftWasDown = false;
+    static bool PausedProp = false;
+    static float TimeScaleProp = 1;
+    Game()
+    {
+#if UNITY_EDITOR
+        EditorApplication.update += GlobalUpdate;
+#endif
+    }
+    static public float GameTimeScale
+    {
+        get
+        {
+            return TimeScaleProp;
+        }
+        set
+        {
+            TimeScaleProp = value;
+            GameSession.DispatchEvent("TimeScaleChanged");
+        }
+    }
+    [ExposeProperty]
+    public float TimeScale
+    {
+        get
+        {
+            return TimeScaleProp;
+        }
+        set
+        {
+            TimeScaleProp = value;
+        }
+    }
+    static public bool Paused
+    {
+        get
+        {
+            return PausedProp;
+        }
+        set
+        {
+            if(value != PausedProp)
+            {
+                PausedProp = value;
+                GameSession.DispatchEvent("PausedStateChanged");
+            }
+        }
+    }
+    static public bool GameWasPaused { get; private set; }
+    static public bool GameWasPlaying { get; private set; }
 
     static bool PausedProp = false;
     static float TimeScaleProp = 1;
@@ -64,6 +114,11 @@ public class Game : MonoBehaviour
     static GameObject GameEventHandler { get; set; }
 
     static GameObject HandlerResource;
+
+    static Game()
+    {
+    }
+
     static void InitializeGame()
     {
         GameSession = Resources.Load<GameObject>("Prefabs/GameSession");
@@ -131,3 +186,4 @@ public class Game : MonoBehaviour
     //    Debug.Log("Game Quitting");
     //}
 }
+

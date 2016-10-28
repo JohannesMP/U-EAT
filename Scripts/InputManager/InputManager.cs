@@ -42,7 +42,6 @@ public enum Buttons
 public struct GamepadStickValues
 {
     public float XPos;
-
     public float YPos;
 }
 
@@ -75,15 +74,45 @@ public class MouseEvent : EventData
     }
 }
 
+public class ScrollEvent : EventData
+{
+    public enum ScrollDirection
+    {
+        Up,
+        Down
+    }
+    public ScrollDirection Direction;
+    public ScrollEvent(ScrollDirection direction)
+    {
+        Direction = direction;
+    }
+}
+
+public class DragEvent : MouseEvent
+{
+    public Vector2 Delta;
+    public DragEvent(Mouse button, Vector2 position, Vector2 delta) : base(button, position)
+    {
+        Delta = delta;
+    }
+}
+
 public static class InputManager
 {
     //// list of Input States so we can determine different states.
-    //static readonly int InputSize = 256;
-    //static bool[] LastInputState = new bool[InputSize];
-    //static bool[] CurrentInputState = new bool[InputSize];
-
+#if UNITY_EDITOR
+    static public Vector2 MousePosition = new Vector2();
+    static public Vector3 MouseWorldPosition = new Vector3();
+    static public bool MouseScrolling = false;
+    static public bool MouseDragging = false;
+    static readonly int InputSize = 512;
+    static public bool[] LastInputState = new bool[InputSize];
+    static public bool[] CurrentInputState = new bool[InputSize];
+#endif
     //static KeyboardEvent KeyboardData = new KeyboardEvent(KeyCode.A);
     //static MouseEvent MouseData = new MouseEvent(Mouse.LEFT, new Vector2(0,0));
+
+
 
     static InputManager()
     {
@@ -94,9 +123,15 @@ public static class InputManager
     /*********************************************************************
      Keyboard wrappers 
      *********************************************************************/
-    static public bool IsKeyTriggered(KeyCode Key)
+    static public bool IsKeyTriggered(KeyCode key)
     {
-      return Input.GetKeyDown(Key);
+#if UNITY_EDITOR
+        if(!Application.isPlaying)
+        {
+            return CurrentInputState[(int)key] && !LastInputState[(int)key];
+        }
+#endif
+        return Input.GetKeyDown(key);
     }
 
     /*************************************************************************/
@@ -106,9 +141,15 @@ public static class InputManager
         is down
     */
     /*************************************************************************/
-    static public bool IsKeyDown(KeyCode Key)
+    static public bool IsKeyDown(KeyCode key)
     {
-      return Input.GetKey(Key);
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            return CurrentInputState[(int)key] && LastInputState[(int)key];
+        }
+#endif
+        return Input.GetKey(key);
     }
 
     /*************************************************************************/
@@ -118,9 +159,15 @@ public static class InputManager
         is down
     */
     /*************************************************************************/
-    static public bool IsKeyReleased(KeyCode Key)
+    static public bool IsKeyReleased(KeyCode key)
     {
-      return Input.GetKeyUp(Key);
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            return !CurrentInputState[(int)key] && LastInputState[(int)key];
+        }
+#endif
+        return Input.GetKeyUp(key);
     }
 
     /*********************************************************************
@@ -277,6 +324,12 @@ public static class InputManager
     /*************************************************************************/
     static public bool IsMouseDown(Mouse button)
     {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            return CurrentInputState[(int)button] && LastInputState[(int)button];
+        }
+#endif
         return Input.GetMouseButton((int)button);
     }
 
@@ -289,6 +342,12 @@ public static class InputManager
     /*************************************************************************/
     static public bool IsMouseReleased(Mouse button)
     {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            return !CurrentInputState[(int)button] && LastInputState[(int)button];
+        }
+#endif
         return Input.GetMouseButtonUp((int)button);
 
     }
@@ -302,6 +361,13 @@ public static class InputManager
     /*************************************************************************/
     static public bool IsMouseTriggered(Mouse button)
     {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            //Debug.Log(CurrentInputState[(int)button] + " : " + LastInputState[(int)button]);
+            return CurrentInputState[(int)button] && !LastInputState[(int)button];
+        }
+#endif
         return Input.GetMouseButtonDown((int)button);
     }
 }

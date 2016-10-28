@@ -63,13 +63,13 @@ public static class GenericCalculator<T1, T2, TResult>
         }
         catch (InvalidOperationException) { }
         catch (ArgumentException) { }
-        Debug.Log("##################################################");
-        Debug.Log("GenericCalculator<" + typeof(T1).Name + ", " + typeof(T2) + ", " + typeof(TResult) + ">");
-        Debug.Log("AddFunc = " + AddFunc);
-        Debug.Log("SubFunc = " + SubtractFunc);
-        Debug.Log("MultFunc = " + MultiplyFunc);
-        Debug.Log("DivFunc = " + DivideFunc);
-        Debug.Log("##################################################");
+        //Debug.Log("##################################################");
+        //Debug.Log("GenericCalculator<" + typeof(T1).Name + ", " + typeof(T2) + ", " + typeof(TResult) + ">");
+        //Debug.Log("AddFunc = " + AddFunc);
+        //Debug.Log("SubFunc = " + SubtractFunc);
+        //Debug.Log("MultFunc = " + MultiplyFunc);
+        //Debug.Log("DivFunc = " + DivideFunc);
+        //Debug.Log("##################################################");
 #endif
     }
 

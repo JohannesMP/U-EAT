@@ -64,15 +64,18 @@ public class Events
     public static readonly String OnBecameVisible = "OnBecameVisible";
     public static readonly String OnBecameInvisible = "OnBecameInvisible";
 
-    public static readonly String Stuck = "Stuck";
-
-    public static readonly String ValidateText = "ValidateTextEvent";
+    //Gameplay
     public static readonly String LoadNextLevel = "LoadNextLevel";
-    public static readonly String SpawnExitButton = "SpawnExitButton";
-    public static readonly String MouseAppear = "MouseAppear";
-    public static readonly String IndexAppear = "IndexAppear";
-    public static readonly String IndexDisappear = "IndexDisappear";
-    public static readonly String SpawnOptionsButton = "SpawnOptionsButton";
+    public static readonly String Attacked = "Attacked";
+    public static readonly String AttackFinished = "AttackFinished";
+    public static readonly String Damage = "Damage";
+    public static readonly String Killed = "Killed";
+
+    public static readonly String KeyUp = "KeyUp";
+    public static readonly String KeyDown = "KeyDown";
+    public static readonly String OnScroll = "OnScroll";
+    public static readonly String MouseDragStarted = "MouseDragStarted";
+    public static readonly String MouseDragEnded = "MouseDragEnded";
 
 #if UNITY_EDITOR
     //Whether or not to display a text input box or a dropdown menu.
@@ -80,7 +83,9 @@ public class Events
 #endif
     //Nonstatic
     public string EventName = DefaultEvent;
-    public Events() { }
+    public Events()
+    {
+    }
     public Events(string eventName)
     {
         EventName = eventName;
@@ -169,6 +174,35 @@ public class BoolEvent : EventData
     public BoolEvent(bool boolValue = false)
     {
         Value = boolValue;
+
+    }
+    public static implicit operator bool(BoolEvent value)
+    {
+        return value.Value;
+    }
+    public static implicit operator BoolEvent(bool value)
+    {
+        return new BoolEvent(value);
+    }
+}
+
+public class GameObjectEvent : EventData
+{
+    public GameObject Value;
+    public GameObjectEvent(GameObject objectValue = null)
+    {
+        Value = objectValue;
+
+    }
+    public static implicit operator bool(GameObjectEvent value)
+    {
+        return value.Value;
+    }
+    public static implicit operator GameObjectEvent(GameObject value)
+    {
+        return new GameObjectEvent(value);
+    }
+}
 
     }
     public static implicit operator bool(BoolEvent value)

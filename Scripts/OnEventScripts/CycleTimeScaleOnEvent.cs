@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public enum TimeScaleTypes
 {
     GameTimeScale,
-    GlobalTimeScale
+    GlobalTimeScale,
+    Both
 }
 public class CycleTimeScaleOnEvent : EditOnEvent
 {

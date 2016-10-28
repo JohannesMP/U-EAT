@@ -18,5 +18,19 @@ public class SetTimeScaleOnEvent : OnEvent
             Game.GameTimeScale = TimeScale;
         }
         
+        if(TimeScaleType == TimeScaleTypes.Both)
+        {
+            Time.timeScale = TimeScale;
+            Game.GameTimeScale = TimeScale;
+        }
+        else if(TimeScaleType == TimeScaleTypes.GameTimeScale)
+        {
+            Time.timeScale = TimeScale;
+        }
+        else
+        {
+            Game.GameTimeScale = TimeScale;
+        }
+        
     }
 }
