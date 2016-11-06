@@ -5,8 +5,10 @@ using System.Collections.Generic;
 
 public class EditScaleOnEvent : EditOnEvent
 {
+    static Dictionary<GameObject, ActionSequence> ActionMap = new Dictionary<GameObject, ActionSequence>();
     public bool Additive = false;
     bool LocalScale = true;
+    public bool ClearActions = false;
     public Vector3 TargetScale = new Vector3(1, 1, 1);
     public float Duration = 1.0f;
     public Curve EasingCurve = Ease.Linear;
@@ -38,17 +40,28 @@ public class EditScaleOnEvent : EditOnEvent
             //}
 
         }
-        Seq = Action.Sequence(Actions);
-        
+        if (ActionMap.ContainsKey(gameObject))
+        {
+            Seq = ActionMap[gameObject];
+        }
+        else
+        {
+            Seq = Action.Sequence(Actions);
+            ActionMap.Add(gameObject, Seq);
+        }
     }
 
     public override void OnEventFunc(EventData data)
     {
-        if (Seq.IsCompleted())
+        if (ClearActions)
         {
-            Seq = Action.Sequence(Actions);
+            Seq.Clear();
         }
         
+        Seq = Action.Sequence(Actions);
+        ActionMap[gameObject] = Seq;
+        
+
         if (LocalScale)
         {
             Action.Property(Seq, TargetTransform.GetProperty(o => o.localScale), TargetScale, Duration, EasingCurve);
@@ -60,5 +73,10 @@ public class EditScaleOnEvent : EditOnEvent
         //}
         
         EditChecks(Seq);
+    }
+
+    void OnDestroyed()
+    {
+        ActionMap.Remove(gameObject);
     }
 }

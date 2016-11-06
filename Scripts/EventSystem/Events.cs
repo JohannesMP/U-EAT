@@ -36,6 +36,7 @@ public class Events
     public static readonly String Initialize = "InitializeEvent";
     public static readonly String LogicUpdate = "LogicUpdate";
     public static readonly String LateUpdate = "LateUpdateEvent";
+    public static readonly String FixedUpdate = "FixedUpdateEvent";
     public static readonly String Destroy = "DestroyEvent";
 
     public static readonly String ApplicationPause = "PauseEvent";
@@ -186,6 +187,60 @@ public class BoolEvent : EventData
     }
 }
 
+public class Vector2Event : EventData
+{
+    public Vector2 Value;
+    public Vector2Event(Vector2 vecValue = new Vector2())
+    {
+        Value = vecValue;
+
+    }
+    public static implicit operator Vector2(Vector2Event value)
+    {
+        return value.Value;
+    }
+    public static implicit operator Vector2Event(Vector2 value)
+    {
+        return new Vector2Event(value);
+    }
+}
+
+public class Vector3Event : EventData
+{
+    public Vector3 Value;
+    public Vector3Event(Vector3 vecValue = new Vector3())
+    {
+        Value = vecValue;
+
+    }
+    public static implicit operator Vector3(Vector3Event value)
+    {
+        return value.Value;
+    }
+    public static implicit operator Vector3Event(Vector3 value)
+    {
+        return new Vector3Event(value);
+    }
+}
+
+public class Vector4Event : EventData
+{
+    public Vector4 Value;
+    public Vector4Event(Vector4 vecValue = new Vector4())
+    {
+        Value = vecValue;
+
+    }
+    public static implicit operator Vector4(Vector4Event value)
+    {
+        return value.Value;
+    }
+    public static implicit operator Vector4Event(Vector4 value)
+    {
+        return new Vector4Event(value);
+    }
+}
+
 public class GameObjectEvent : EventData
 {
     public GameObject Value;
@@ -194,7 +249,7 @@ public class GameObjectEvent : EventData
         Value = objectValue;
 
     }
-    public static implicit operator bool(GameObjectEvent value)
+    public static implicit operator GameObject(GameObjectEvent value)
     {
         return value.Value;
     }
@@ -281,6 +336,52 @@ public class CollisionEvent3D : EventData
         return new CollisionEvent3D(value);
     }
 }
+
+public class EventData<T1> : EventData
+{
+    public T1 Value;
+    public EventData(T1 value)
+    {
+        Value = value;
+    }
+
+    public static implicit operator T1(EventData<T1> value)
+    {
+        return value.Value;
+    }
+
+    public static implicit operator EventData<T1>(T1 value)
+    {
+        return new EventData<T1>(value);
+    }
+}
+public class EventData<T1, T2> : EventData<T1>
+{
+    public T2 Value2;
+    public EventData(T1 value, T2 value2) : base(value)
+    {
+        Value2 = value2;
+    }
+}
+
+public class EventData<T1, T2, T3> : EventData<T1, T2>
+{
+    public T3 Value3;
+    public EventData(T1 value, T2 value2, T3 value3) : base(value, value2)
+    {
+        Value3 = value3;
+    }
+}
+
+public class EventData<T1, T2, T3, T4> : EventData<T1, T2, T3>
+{
+    public T4 Value4;
+    public EventData(T1 value, T2 value2, T3 value3, T4 value4) : base(value, value2, value3)
+    {
+        Value4 = value4;
+    }
+}
+
 
 //A custom property drawer for the 'Events' class.
 //It can toggle between a string input field and a dropdown menu of all the events.

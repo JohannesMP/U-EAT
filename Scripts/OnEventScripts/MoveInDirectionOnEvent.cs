@@ -75,14 +75,11 @@ public class MoveInDirectionOnEvent : OnEvent
     {
         var newPos = transform.position;
         var speed = Speed;
-        if(!UsePhysics)
+        if(!UsePhysics && UseTimeScale)
         {
-            speed *= Time.smoothDeltaTime;
+            Speed *= Time.smoothDeltaTime;
         }
-        if(UseTimeScale)
-        {
-            speed *= Game.GameTimeScale;
-        }
+        
         var addVec = (MoveDir * speed);
         if (!FollowXYZ.x)
         {

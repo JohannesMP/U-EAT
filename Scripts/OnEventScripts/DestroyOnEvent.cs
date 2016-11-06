@@ -3,6 +3,8 @@ using System.Collections;
 using ActionSystem;
 public class DestroyOnEvent : OnEvent
 {
+    public float Delay = 0.001f;
+
     public override void Awake()
     {
         base.Awake();
@@ -11,7 +13,6 @@ public class DestroyOnEvent : OnEvent
     public override void OnEventFunc(EventData data)
     {
         this.DispatchEvent();
-        Destroy(gameObject);
+        DestroyObject(gameObject, Delay);
     }
-
 }

@@ -13,11 +13,12 @@ public class Game : MonoBehaviour
     {
         get
         {
-            return TimeScaleProp;
+            return Time.timeScale;
         }
         set
         {
-            TimeScaleProp = value;
+            //Time.fixedDeltaTime = value * 0.02f;
+            Time.timeScale = value;
             GameSession.DispatchEvent("TimeScaleChanged");
         }
     }

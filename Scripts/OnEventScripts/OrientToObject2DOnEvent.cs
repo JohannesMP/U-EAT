@@ -32,9 +32,9 @@ public class OrientToObject2DOnEvent : OnEvent
         var aimVec = transform.position - TargetObject.transform.position;
         aimVec = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Atan2(aimVec.y, aimVec.x) * 180 / Mathf.PI + Offset);
         var speed = LerpSpeed * Time.smoothDeltaTime;
-        if (UseTimeScale)
+        if (!UseTimeScale)
         {
-            speed *= Game.GameTimeScale;
+            speed /= Game.GameTimeScale;
         }
         aimVec.z = Mathf.LerpAngle(transform.eulerAngles.z, aimVec.z, speed);
         transform.eulerAngles = aimVec;

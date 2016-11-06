@@ -21,13 +21,13 @@ using ActionSystem;
 public class ObjectActions : MonoBehaviour
 {
     [CustomNames(new string[] { "UseTimeScale", "UsePaused" }, false, EditorNameFlags.None)]
-    public Boolean2 UseGameTimeScaleOrPaused = new Boolean2(false, false);
-    public bool UseGameTimeScale { get { return UseGameTimeScaleOrPaused.x; } set { UseGameTimeScaleOrPaused.x = value; } }
-    public bool UseGamePaused { get { return UseGameTimeScaleOrPaused.y; } set { UseGameTimeScaleOrPaused.y = value; } }
+    public Boolean2 UseTimeScaleOrPaused = new Boolean2(true, false);
+    public bool UseTimeScale { get { return UseTimeScaleOrPaused.x; } set { UseTimeScaleOrPaused.x = value; } }
+    public bool UseGamePaused { get { return UseTimeScaleOrPaused.y; } set { UseTimeScaleOrPaused.y = value; } }
     const bool IsVisibleInInspector = false;
     public ActionGroup Actions = new ActionGroup();
     float TimeScaleProp = 1;
-    public float TimeScale
+    public float IndividualTimeScale
     {
         get
         {
@@ -45,11 +45,6 @@ public class ObjectActions : MonoBehaviour
             hideFlags = HideFlags.HideInInspector;
         }
         Game.GameSession.Connect("PausedStateChanged", OnPausedStateChanged);
-        Game.GameSession.Connect("TimeScaleChanged", OnTimeScaleChanged);
-        if(UseGameTimeScale)
-        {
-            TimeScale = Game.GameTimeScale;
-        }
     }
 
     void OnPausedStateChanged(EventData data)
@@ -68,18 +63,15 @@ public class ObjectActions : MonoBehaviour
         }
     }
 
-    void OnTimeScaleChanged(EventData data)
-    {
-        if(UseGameTimeScale)
-        {
-            TimeScale = Game.GameTimeScale;
-        }
-    }
-
 	// Update is called once per frame
 	void Update()
     {
-        Actions.Update(Time.smoothDeltaTime * TimeScale);
+        float dt = Time.smoothDeltaTime;
+        if(!UseTimeScale)
+        {
+            dt /= Time.timeScale;
+        }
+        Actions.Update(dt * IndividualTimeScale);
 	}
 }
 
