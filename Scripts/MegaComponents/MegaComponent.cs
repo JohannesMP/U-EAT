@@ -100,69 +100,6 @@ public class MegaComponent : MonoBehaviour
         }
         return componentList;
     }
-
-    public virtual void Awake()
-    {
-        ComponentList = GenerateComponents().ToArray();
-        
-    }
-
-    public void OnDestroy()
-    {
-        if ((Game.GameWasPlaying && !Application.isPlaying))
-        {
-            foreach (var i in ComponentList)
-            {
-                Destroy(i);
-            }
-        }
-        else if(!Game.GameWasPlaying && Application.isPlaying)
-        {
-            foreach (var i in ComponentList)
-            {
-                DestroyImmediate(i);
-            }
-        }
-    }
-
-    public void ReleaseComponents()
-    {
-        foreach (var i in ComponentList)
-        {
-            i.hideFlags = HideFlags.None;
-        }
-        ComponentList = new List<Behaviour>().ToArray();
-        DestroyImmediate(this);
-    }
-
-    public List<Behaviour> GenerateComponents()
-    {
-        var type = GetType();
-        List<Behaviour> componentList = new List<Behaviour>();
-        foreach (var i in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-        {
-            if (i.FieldType.IsDerivedFrom(typeof(Behaviour)))
-            {
-                var attributes = i.GetCustomAttributes(typeof(MegaComponent.MegaRegister), true);
-                if (attributes.Length == 0)
-                {
-                    continue;
-                }
-                Behaviour compProp = (Behaviour)i.GetValue(this);
-                if (compProp == null)
-                {
-                    compProp = gameObject.AddComponent(i.FieldType) as Behaviour;
-                    i.SetValue(this, compProp);
-                }
-                componentList.Add(compProp);
-            }
-        }
-        foreach (var comp in componentList)
-        {
-            comp.hideFlags = HideFlags.HideInInspector;
-        }
-        return componentList;
-    }
 }
 
 

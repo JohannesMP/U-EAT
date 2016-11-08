@@ -87,10 +87,13 @@ public class FollowObjectOnEvent : OnEvent
         DistanceFromTarget = offset.magnitude;
         if((DistanceFromTarget > MinDistance) && (DistanceFromTarget > float.Epsilon))
         {
+            //Time.fixedDeltaTime *= Time.timeScale;
+            //Time.fixedDeltaTime = Time.deltaTime;
+            
             var speed = Speed * Time.smoothDeltaTime;
-            if(UseTimeScale)
+            if(!UseTimeScale)
             {
-                speed *= Game.GameTimeScale;
+                speed /=  Time.timeScale;
             }
             if (UseLerp)
             {

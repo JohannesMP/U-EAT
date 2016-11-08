@@ -9,41 +9,16 @@ using UnityEditor;
 
 public class Game : MonoBehaviour
 {
-    static public bool Paused
-    {
-        get
-        {
-            return PausedProp;
-        }
-        set
-        {
-            if(value != PausedProp)
-            {
-                PausedProp = value;
-                GameSession.DispatchEvent("PausedStateChanged");
-            }
-        }
-    }
-    static public bool GameWasPaused { get; private set; }
-    static public bool GameWasPlaying { get; private set; }
-    static public bool ShiftWasDown = false;
-    static bool PausedProp = false;
-    static float TimeScaleProp = 1;
-    Game()
-    {
-#if UNITY_EDITOR
-        EditorApplication.update += GlobalUpdate;
-#endif
-    }
     static public float GameTimeScale
     {
         get
         {
-            return TimeScaleProp;
+            return Time.timeScale;
         }
         set
         {
-            TimeScaleProp = value;
+            //Time.fixedDeltaTime = value * 0.02f;
+            Time.timeScale = value;
             GameSession.DispatchEvent("TimeScaleChanged");
         }
     }
@@ -84,30 +59,6 @@ public class Game : MonoBehaviour
 #if UNITY_EDITOR
         EditorApplication.update += GlobalUpdate;
 #endif
-    }
-    static public float GameTimeScale
-    {
-        get
-        {
-            return TimeScaleProp;
-        }
-        set
-        {
-            TimeScaleProp = value;
-            GameSession.DispatchEvent("TimeScaleChanged");
-        }
-    }
-    [ExposeProperty]
-    public float TimeScale
-    {
-        get
-        {
-            return TimeScaleProp;
-        }
-        set
-        {
-            TimeScaleProp = value;
-        }
     }
     public static GameObject GameSession { get; private set; }
     static Game GameComp { get; set; }

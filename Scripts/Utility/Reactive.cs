@@ -160,6 +160,19 @@ public class Reactive : MonoBehaviour
         gameObject.DispatchEvent(Events.LateUpdate);
     }
 
+    void FixedUpdate()
+    {
+        if (!Active)
+        {
+            return;
+        }
+        if (!UpdateEvents)
+        {
+            return;
+        }
+        gameObject.DispatchEvent(Events.FixedUpdate);
+    }
+
     void OnDestroy()
     {
         if (!Active)

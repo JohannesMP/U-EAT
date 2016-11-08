@@ -136,6 +136,14 @@ public static class ExtensionMethods
         return obj;
     }
 
+    public static ActionSequence DispatchEventNextFrame(this GameObject instance, string eventName, EventData data = null)
+    {
+        var seq = ActionSystem.Action.Sequence(instance.GetActions());
+        ActionSystem.Action.Delay(seq, Time.deltaTime / 2);
+        ActionSystem.Action.Call(seq, EventSystem.DispatchEvent, instance, eventName, data);
+        return seq;
+    }
+
     public static int IndexOf<T>(this T[] instance, T param)
     {
         for (int i = 0; i < instance.Length; ++i)

@@ -30,9 +30,9 @@ public class FollowMouseOnEvent : OnEvent
         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = transform.position.z;
         var speed = LerpSpeed * Time.smoothDeltaTime;
-        if (UseTimeScaleOrBounds.x)
+        if (!UseTimeScaleOrBounds.x)
         {
-            speed *= Game.GameTimeScale;
+            speed /= Game.GameTimeScale;
         }
         
         if (UsePhysics)
