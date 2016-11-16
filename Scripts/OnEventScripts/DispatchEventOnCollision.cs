@@ -87,4 +87,3 @@ public class DispatchEventOnCollision : MonoBehaviour
         return (CollisionMask.value & (1 << obj.layer)) != 0;
     }
 }
-

@@ -18,7 +18,7 @@ public class SetVisiblityOnEvent : OnEvent
 	
     public override void OnEventFunc(EventData data)
     {
-        Renderer.enabled = false;
+        Renderer.enabled = SetVisible;
     }
 
 

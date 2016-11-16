@@ -16,7 +16,7 @@ public class CycleTimeScaleOnEvent : EditOnEvent
     {
         base.Awake();
         TimeScaleList.Add(Game.GameTimeScale);
-        
+
         NextTimeScale = TimeScaleList.GetEnumerator();
         NextTimeScale.MoveNext();
     }
@@ -31,3 +31,5 @@ public class CycleTimeScaleOnEvent : EditOnEvent
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using ActionSystem;
 public class FollowMouseOnEvent : OnEvent
@@ -15,7 +15,7 @@ public class FollowMouseOnEvent : OnEvent
     public override void Awake()
     {
         base.Awake();
-        if(UsePhysics)
+        if (UsePhysics)
         {
             Body = this.GetOrAddComponent<Rigidbody2D>();
         }
@@ -23,7 +23,7 @@ public class FollowMouseOnEvent : OnEvent
 
     public override void OnEventFunc(EventData data)
     {
-        if(UsePaused && Game.Paused)
+        if (UsePaused && Game.Paused)
         {
             return;
         }
@@ -34,7 +34,7 @@ public class FollowMouseOnEvent : OnEvent
         {
             speed /= Game.GameTimeScale;
         }
-        
+
         if (UsePhysics)
         {
             var offset = mousePos - transform.position;
