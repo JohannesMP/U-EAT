@@ -77,7 +77,7 @@ public class Events
     public static readonly String OnScroll = "OnScroll";
     public static readonly String MouseDragStarted = "MouseDragStarted";
     public static readonly String MouseDragEnded = "MouseDragEnded";
-
+    public static readonly String EngineUpdate = "EngineUpdate";
 #if UNITY_EDITOR
     //Whether or not to display a text input box or a dropdown menu.
     public bool AsString = false;

@@ -101,10 +101,10 @@ public static class InputManager
 {
     //// list of Input States so we can determine different states.
 
-    static public Vector2 MousePosition { get { return Input.mousePosition; } }
-    static public Vector3 MouseWorldPosition { get { return Camera.main.ScreenToWorldPoint(MousePosition); } } //= new Vector3();
+    static public Vector2 MousePosition { get; set; }
+    static public Vector3 MouseWorldPosition { get; set; } //= new Vector3();
 #if UNITY_EDITOR
-    //static public bool MouseScrolling { get { return Input.Mous } }
+    static public bool MouseScrolling { get; set; }
     static public bool MouseDragging = false;
     static readonly int InputSize = 512;
     static public bool[] LastInputState = new bool[InputSize];
