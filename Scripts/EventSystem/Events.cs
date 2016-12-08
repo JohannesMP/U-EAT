@@ -78,31 +78,6 @@ public class Events
     public static readonly String MouseDragStarted = "MouseDragStarted";
     public static readonly String MouseDragEnded = "MouseDragEnded";
 
-    public static readonly String SetPath = "SetPath";
-    public static readonly String ClearPath = "ClearPath";
-    public static readonly String MoveToCoordinate = "MoveToCoordinate";
-    public static readonly String GridSizeChanged = "GridSizeChanged";
-
-    public static readonly String DestroyAllOfObjectType = "DestroyAllOfObjectType";
-    public static readonly String SpawnRandomObjects = "SpawnRandomObjects";
-
-    public static readonly String SetCameraZoom = "SetCameraZoom";
-
-    public static readonly String EngineUpdate = "EngineUpdate";
-
-    public static readonly String SetDebugDraw = "SetDebugDraw";
-    public static readonly String ToggleDebugDraw = "ToggleDebugDraw";
-
-
-    public static readonly String MakeResourceRequest = "MakeResourceRequest";
-    public static readonly String RetractResourceRequest = "RetractResourceRequest";
-
-    public static readonly String MakeResourceOffer = "MakeResourceOffer";
-    public static readonly String RetractResourceOffer = "RetractResourceOffer";
-
-    public static readonly String RegisterAsRunner = "RegisterAsRunner";
-    public static readonly String UnregisterAsRunner = "UnregisterAsRunner";
-
 #if UNITY_EDITOR
     //Whether or not to display a text input box or a dropdown menu.
     public bool AsString = false;
