@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using ActionSystem;
 public class FollowObjectOnEvent : OnEvent
@@ -15,7 +15,7 @@ public class FollowObjectOnEvent : OnEvent
         set
         {
             ObjectToFollowProp = value;
-            if(ObjectToFollowProp)
+            if (ObjectToFollowProp)
             {
                 TargetPos = ObjectToFollowProp.transform.position;
             }
@@ -31,13 +31,13 @@ public class FollowObjectOnEvent : OnEvent
     public bool UseTimeScale { get { return UseTimeScaleOrUpdateTargetPosition.x; } set { UseTimeScaleOrUpdateTargetPosition.x = value; } }
     public bool UpdateTargetPosition { get { return UseTimeScaleOrUpdateTargetPosition.y; } set { UseTimeScaleOrUpdateTargetPosition.y = value; } }
     public float MinDistance = 1;
-    public bool FollowX { get{ return FollowXYZ.x; } set { FollowXYZ.x = value; } }
+    public bool FollowX { get { return FollowXYZ.x; } set { FollowXYZ.x = value; } }
     public bool FollowY { get { return FollowXYZ.y; } set { FollowXYZ.y = value; } }
     public bool FollowZ { get { return FollowXYZ.z; } set { FollowXYZ.z = value; } }
-    [CustomNames(new string[] { }, true, EditorNameFlags.Default  ^ EditorNameFlags.IndentBelow)]
+    [CustomNames(new string[] { }, true, EditorNameFlags.Default ^ EditorNameFlags.IndentBelow)]
     public Boolean3 FollowXYZ = new Boolean3(true, true, true);
     [CustomNames(new string[] { "Use Lerp", "Use Bounds" }, false, EditorNameFlags.None)]
-    public Boolean2 UseLerpOrBounds = new Boolean2(false, false );
+    public Boolean2 UseLerpOrBounds = new Boolean2(false, false);
     public bool UseLerp { get { return UseLerpOrBounds.x; } set { UseLerpOrBounds.x = value; } }
     public Vector3 TargetOffset = new Vector3();
     public bool UseBounds { get { return UseLerpOrBounds.y; } set { UseLerpOrBounds.y = value; } }
@@ -49,7 +49,7 @@ public class FollowObjectOnEvent : OnEvent
     public override void Awake()
     {
         base.Awake();
-        
+
     }
 
     public override void Start()
@@ -60,18 +60,18 @@ public class FollowObjectOnEvent : OnEvent
         {
             throw new System.Exception("FollowObjectOnEvent needs an object to follow.");
         }
-        
+
     }
 
     public override void OnEventFunc(EventData data)
     {
         Vector3 newPos = transform.position;
-        if(UpdateTargetPosition)
+        if (UpdateTargetPosition)
         {
             TargetPos = ObjectToFollow.transform.position + TargetOffset;
         }
         var offset = TargetPos - gameObject.transform.position;
-        
+
         if (!FollowX)
         {
             offset.x = 0;
@@ -85,31 +85,38 @@ public class FollowObjectOnEvent : OnEvent
             offset.z = 0;
         }
         DistanceFromTarget = offset.magnitude;
-        if((DistanceFromTarget > MinDistance) && (DistanceFromTarget > float.Epsilon))
+        if ((DistanceFromTarget > MinDistance) && (DistanceFromTarget > float.Epsilon))
         {
             //Time.fixedDeltaTime *= Time.timeScale;
             //Time.fixedDeltaTime = Time.deltaTime;
-            
+
             var speed = Speed * Time.smoothDeltaTime;
-            if(!UseTimeScale)
+            if (!UseTimeScale)
             {
-                speed /=  Time.timeScale;
+                speed /= Time.timeScale;
             }
             if (UseLerp)
             {
-                newPos = Vector3.Lerp(transform.position, TargetPos, speed);
+                newPos = Vector3.Lerp(transform.position, TargetPos, Mathf.Clamp01(speed));
             }
             else
             {
                 var dir = (TargetPos - gameObject.transform.position) / DistanceFromTarget;
+                var previousPos = newPos;
                 newPos = transform.position + (dir * speed);
+                var currentPosToTargetMag = (TargetPos - newPos).sqrMagnitude;
+                var previousPosToCurrentPosMag = (previousPos - newPos).sqrMagnitude;
+                if (previousPosToCurrentPosMag >= currentPosToTargetMag)
+                {
+                    newPos = TargetPos;
+                }
             }
         }
-        
+
         newPos.x = Mathf.Clamp(newPos.x, XBounds.x, XBounds.y);
         newPos.y = Mathf.Clamp(newPos.y, YBounds.x, YBounds.y);
 
-        if(!FollowX)
+        if (!FollowX)
         {
             newPos.x = transform.position.x;
         }
@@ -127,3 +134,4 @@ public class FollowObjectOnEvent : OnEvent
 
     }
 }
+

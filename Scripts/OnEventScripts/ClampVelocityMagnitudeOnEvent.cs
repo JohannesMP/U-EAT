@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using ActionSystem;
 public class ClampVelocityMagnitudeOnEvent : EditOnEvent
@@ -20,12 +20,12 @@ public class ClampVelocityMagnitudeOnEvent : EditOnEvent
     public override void OnEventFunc(EventData data)
     {
         var velocitySqMag = BodyComp.velocity.sqrMagnitude;
-        if(velocitySqMag < MinVelocitySqMagnitude)
+        if (velocitySqMag < MinVelocitySqMagnitude)
         {
             BodyComp.velocity *= MinVelocitySqMagnitude / velocitySqMag;
-            
+
         }
-        else if(velocitySqMag > MaxVelocitySqMagnitude)
+        else if (velocitySqMag > MaxVelocitySqMagnitude)
         {
             BodyComp.velocity *= MaxVelocitySqMagnitude / velocitySqMag;
         }
@@ -33,3 +33,4 @@ public class ClampVelocityMagnitudeOnEvent : EditOnEvent
 
 
 }
+

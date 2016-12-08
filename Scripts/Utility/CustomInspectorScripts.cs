@@ -15,6 +15,34 @@ namespace CustomInspector
         FieldsBeforeProperties
     }
 
+    internal interface ReferenceType
+    {
+        object GetValue();
+    }
+
+    public class ReferenceType<T> : ReferenceType
+    {
+        public T Value;
+        public ReferenceType(T val)
+        {
+            Value = val;
+        }
+
+        public object GetValue()
+        {
+            return Value;
+        }
+
+        static public implicit operator T(ReferenceType<T> rhs)
+        {
+            return rhs.Value;
+        }
+        static public implicit operator ReferenceType<T>(T rhs)
+        {
+            return new ReferenceType<T>(rhs);
+        }
+    }
+
     static class CustomInspectorScripts
     {
         //A private Unity function that gets the drawer type for the given class type.
@@ -22,7 +50,7 @@ namespace CustomInspector
 
         //Add a function with the type that is being drawn for as the key and the draw function as the value in order for that type to be drawn when exposing a property.
         public static Dictionary<Type, Func<Rect, object, GUIContent, ICustomAttributeProvider, object>> TypeDrawFunctions = new Dictionary<Type, Func<Rect, object, GUIContent, ICustomAttributeProvider, object>>();
-
+        //public static Dictionary<Type, Func<Rect, ValueType, GUIContent, ICustomAttributeProvider, ValueType>> ValueTypeDrawFunctions = new Dictionary<Type, Func<Rect, ValueType, GUIContent, ICustomAttributeProvider, ValueType>>();
         static CustomInspectorScripts()
         {
             //Unity should really make this public...
@@ -35,14 +63,20 @@ namespace CustomInspector
             {
                 foreach(var method in drawer.GetMethods(BindingFlags.Public | BindingFlags.Static))
                 {
-                    if (method.HasAttribute(typeof(ExposeDrawMethod)))
+                    var methodAttr = method.GetCustomAttributes<ExposeDrawMethod>();
+                    if (methodAttr.Length != 0)
                     {
-                        if (method.ReturnType == null)
+                        var returnType = method.ReturnType;
+                        if(methodAttr[0].ActualType != null)
+                        {
+                            returnType = methodAttr[0].ActualType;
+                        }
+                        if (returnType == null)
                         {
                             throw new Exception("Method of with the 'ExposeDrawMethod' attribute must have a return type.");
                         }
                         var func = (Func<Rect, object, GUIContent, ICustomAttributeProvider, object>)Delegate.CreateDelegate(typeof(Func<Rect, object, GUIContent, ICustomAttributeProvider, object>), method);
-                        TypeDrawFunctions.Add(method.ReturnType, func);
+                        TypeDrawFunctions.Add(returnType, func);
                     }
                 }
             }
@@ -138,7 +172,7 @@ namespace CustomInspector
                     {
                         continue;
                     }
-
+                    
                     ExposeProperty(me, i as PropertyInfo);
                 }
                 if (readOnly)
@@ -154,6 +188,7 @@ namespace CustomInspector
         //Will expose a property REGARDLESS OF ITS ATTRIBUTES
         public static void ExposeProperty(this Editor me, PropertyInfo info)
         {
+            
             if (!info.CanRead)
             {
                 throw new Exception("An exposed property must at least have a getter.");
@@ -265,6 +300,17 @@ namespace CustomInspector
                         }
                     }
                     break;
+                case SerializedPropertyType.Enum:
+                    {
+
+                        Enum val = (Enum)info.GetGetMethod().Invoke(me.target, EmptyObjectArray);
+                        val = EditorGUILayout.EnumPopup(name, val);
+                        if (info.CanWrite)
+                        {
+                            info.SetValue(me.target, val, EmptyObjectArray);
+                        }
+                    }
+                    break;
                 case SerializedPropertyType.Vector2:
                     {
                         var getter = me.target.GetPropertyGetter<object, Vector2>(info);
@@ -360,21 +406,26 @@ namespace CustomInspector
                 case SerializedPropertyType.Generic:
                 default:
                     {
-                        var rect = EditorGUILayout.BeginVertical();
-                        if (TypeDrawFunctions.ContainsKey(info.PropertyType))
+                        var propType = info.PropertyType;
+                        if (TypeDrawFunctions.ContainsKey(propType))
                         {
-                            GUILayout.Label("");
+                            var rect = EditorGUILayout.GetControlRect();
                             var val = info.GetGetMethod().Invoke(me.target, EmptyObjectArray);
                             var contentName = new GUIContent();
                             contentName.text = name;
-                            val = TypeDrawFunctions[info.PropertyType](rect, val, contentName, info);
+                            val = TypeDrawFunctions[propType](rect, val, contentName, info);
                             if (info.CanWrite)
                             {
-                                info.SetValue(me.target, val, EmptyObjectArray);
+                                if(!propType.IsValueType)
+                                {
+                                    info.SetValue(me.target, val, EmptyObjectArray);
+                                }
+                                else
+                                {
+                                    info.SetValue(me.target, ((ReferenceType)val).GetValue(), EmptyObjectArray);
+                                }
                             }
-                            EditorGUILayout.EndVertical();
                         }
-
                     }
                     break;
             }
@@ -447,6 +498,10 @@ namespace CustomInspector
             {
                 return SerializedPropertyType.LayerMask;
             }
+            else if (type.IsDerivedFrom(typeof(Enum)))
+            {
+                return SerializedPropertyType.Enum;
+            }
             else if (type == typeof(Vector2))
             {
                 return SerializedPropertyType.Vector2;
@@ -501,6 +556,11 @@ public class ExposeProperty : Attribute
 //Allows the property to be visible and editable in the inspector.
 public class ExposeDrawMethod : Attribute
 {
+    public Type ActualType;
+    public ExposeDrawMethod(Type actualType = null)
+    {
+        ActualType = actualType;
+    }
 }
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]

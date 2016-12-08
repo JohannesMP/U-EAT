@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using ActionSystem;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ public class EditScaleOnEvent : EditOnEvent
     public Vector3 TargetScale = new Vector3(1, 1, 1);
     public float Duration = 1.0f;
     public Curve EasingCurve = Ease.Linear;
-    
+
 
     protected Transform TargetTransform;
     protected ActionSequence Seq;
@@ -33,7 +33,7 @@ public class EditScaleOnEvent : EditOnEvent
             }
             //else
             //{
-                
+
             //    TargetScale.x *= gameObject.transform.lossyScale.x;
             //    TargetScale.y *= gameObject.transform.lossyScale.y;
             //    TargetScale.z *= gameObject.transform.lossyScale.z;
@@ -57,10 +57,10 @@ public class EditScaleOnEvent : EditOnEvent
         {
             Seq.Clear();
         }
-        
+
         Seq = Action.Sequence(Actions);
         ActionMap[gameObject] = Seq;
-        
+
 
         if (LocalScale)
         {
@@ -71,7 +71,7 @@ public class EditScaleOnEvent : EditOnEvent
         //    Debug.Log(transform.GetProperty(o => o.lossyScale));
         //    Action.Property(Seq, transform.GetProperty(o => o.lossyScale), TargetScale, Duration, EasingCurve);
         //}
-        
+
         EditChecks(Seq);
     }
 
@@ -80,3 +80,4 @@ public class EditScaleOnEvent : EditOnEvent
         ActionMap.Remove(gameObject);
     }
 }
+

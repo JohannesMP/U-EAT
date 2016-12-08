@@ -69,7 +69,10 @@ public class Game : MonoBehaviour
     static Game()
     {
     }
-
+#if UNITY_EDITOR
+    [InitializeOnLoadMethod]
+#endif
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void InitializeGame()
     {
         GameSession = Resources.Load<GameObject>("Prefabs/GameSession");
@@ -94,13 +97,11 @@ public class Game : MonoBehaviour
         {
             throw new System.Exception("THE GAMESESSION MUST HAVE A 'GameEventHandler' RESOURCE!");
         }
-        
     }
-
-    [RuntimeInitializeOnLoadMethod]
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void InitializeGameEventHandler()
     {
-        InitializeGame();
         if(!GameEventHandler)
         {
             GameEventHandler = Instantiate(HandlerResource);
@@ -120,6 +121,7 @@ public class Game : MonoBehaviour
     void GlobalUpdate()
     {
         GameWasPlaying = Application.isPlaying;
+        GameSession.DispatchEvent(Events.EngineUpdate);
     }
 
     void OnLogicUpdate(EventData data)
@@ -137,4 +139,3 @@ public class Game : MonoBehaviour
     //    Debug.Log("Game Quitting");
     //}
 }
-

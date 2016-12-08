@@ -3,11 +3,15 @@ using System.Collections;
 using System;
 
 [Serializable]
-public class Boolean3 : Boolean2
+public struct Boolean3
 {
+    public bool x;
+    public bool y;
     public bool z;
-    public Boolean3(bool xVal = false, bool yVal = false, bool zVal = false) : base(xVal, yVal)
+    public Boolean3(bool xVal = false, bool yVal = false, bool zVal = false)
     {
+        x = xVal;
+        y = yVal;
         z = zVal;
     }
 }
@@ -31,13 +35,13 @@ namespace CustomInspector
             var yRef = property.FindPropertyRelative("y");
             var zRef = property.FindPropertyRelative("z");
             var newBool = Draw3(position, new Boolean3(xRef.boolValue, yRef.boolValue, zRef.boolValue), label, fieldInfo);
-            xRef.boolValue = newBool.x;
-            yRef.boolValue = newBool.y;
-            zRef.boolValue = newBool.z;
+            xRef.boolValue = newBool.Value.x;
+            yRef.boolValue = newBool.Value.y;
+            zRef.boolValue = newBool.Value.z;
         }
 
-        [ExposeDrawMethod]
-        static public Boolean3 Draw3(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
+        [ExposeDrawMethod(typeof(Boolean3))]
+        static public ReferenceType<Boolean3> Draw3(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
         {
             Boolean3 boolPair = (Boolean3)eventsObj;
             var boolArray = new bool[] { boolPair.x, boolPair.y, boolPair.z };

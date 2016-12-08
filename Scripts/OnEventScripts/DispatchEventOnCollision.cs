@@ -15,7 +15,8 @@ public class DispatchEventOnCollision : MonoBehaviour
     public LayerMask CollisionMask;
     public Events DispatchEventName = Events.DefaultEvent;
     public GameObject EventTarget;
-
+    CollisionEvent2D Data2D = new CollisionEvent2D();
+    //CollisionEvent3D Data3D = new CollisionEvent3D();
     void Awake()
     {
         if(!EventTarget)
@@ -28,19 +29,21 @@ public class DispatchEventOnCollision : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D otherObj)
     {
         if (!Active) return;
+        Data2D = otherObj;
         if(CollisionMode == CollisionModes.CollisionOnly)
         {
             return;
         }
         if(CanHitObject(otherObj.gameObject))
         {
-            EventTarget.DispatchEvent(DispatchEventName);
+            EventTarget.DispatchEvent(DispatchEventName, Data2D);
         }
     }
 
     public void OnTriggerEnter(Collider otherObj)
     {
         if (!Active) return;
+        //Data3D.StoredCollision = otherObj;
         if (CollisionMode == CollisionModes.CollisionOnly)
         {
             return;
@@ -54,13 +57,14 @@ public class DispatchEventOnCollision : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D otherObj)
     {
         if (!Active) return;
+        Data2D = otherObj;
         if (CollisionMode == CollisionModes.TriggerOnly)
         {
             return;
         }
         if (CanHitObject(otherObj.gameObject))
         {
-            EventTarget.DispatchEvent(DispatchEventName);
+            EventTarget.DispatchEvent(DispatchEventName, Data2D);
         }
     }
 
@@ -83,4 +87,3 @@ public class DispatchEventOnCollision : MonoBehaviour
         return (CollisionMask.value & (1 << obj.layer)) != 0;
     }
 }
-

@@ -14,7 +14,7 @@ public class MoveInDirectionOnEvent : OnEvent
         }
         set
         {
-            if(ObjectToMoveTowardsProp == value)
+            if (ObjectToMoveTowardsProp == value)
             {
                 return;
             }
@@ -22,7 +22,7 @@ public class MoveInDirectionOnEvent : OnEvent
             UpdateAngleAndRotation();
         }
     }
-    [CustomNames(new string[] { "OrientToObject", "UseTimeScale" , "UsePhysics"}, false, EditorNameFlags.None)]
+    [CustomNames(new string[] { "OrientToObject", "UseTimeScale", "UsePhysics" }, false, EditorNameFlags.None)]
     public Boolean3 OrientToObjectOrUseTimeScaleOrUsePhysics = new Boolean3(true, true, true);
     public bool OrientToObject { get { return OrientToObjectOrUseTimeScaleOrUsePhysics.x; } set { OrientToObjectOrUseTimeScaleOrUsePhysics.x = value; } }
     public bool UseTimeScale { get { return OrientToObjectOrUseTimeScaleOrUsePhysics.y; } set { OrientToObjectOrUseTimeScaleOrUsePhysics.y = value; } }
@@ -75,11 +75,11 @@ public class MoveInDirectionOnEvent : OnEvent
     {
         var newPos = transform.position;
         var speed = Speed;
-        if(!UsePhysics && UseTimeScale)
+        if (!UsePhysics && UseTimeScale)
         {
             Speed *= Time.smoothDeltaTime;
         }
-        
+
         var addVec = (MoveDir * speed);
         if (!FollowXYZ.x)
         {
@@ -93,7 +93,7 @@ public class MoveInDirectionOnEvent : OnEvent
         {
             addVec.z = 0;
         }
-        if(!UsePhysics)
+        if (!UsePhysics)
         {
             transform.position = transform.position + addVec;
             transform.position = newPos;

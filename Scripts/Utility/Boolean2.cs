@@ -16,7 +16,7 @@ public enum EditorNameFlags
 }
 
 [Serializable]
-public class Boolean2
+public struct Boolean2
 {
     public bool x;
     public bool y;
@@ -45,8 +45,8 @@ namespace CustomInspector
             var xRef = property.FindPropertyRelative("x");
             var yRef = property.FindPropertyRelative("y");
             var newBool = Draw2(position, new Boolean2(xRef.boolValue, yRef.boolValue), label, fieldInfo);
-            xRef.boolValue = newBool.x;
-            yRef.boolValue = newBool.y;
+            xRef.boolValue = newBool.Value.x;
+            yRef.boolValue = newBool.Value.y;
         }
 
         //Use pipe '|' to seperate the names. 
@@ -153,8 +153,8 @@ namespace CustomInspector
             }
         }
 
-        [ExposeDrawMethod]
-        static public Boolean2 Draw2(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
+        [ExposeDrawMethod(typeof(Boolean2))]
+        static public ReferenceType<Boolean2> Draw2(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
         {
             Boolean2 boolPair = (Boolean2)eventsObj;
             var boolArray = new bool[2]{ boolPair.x, boolPair.y };

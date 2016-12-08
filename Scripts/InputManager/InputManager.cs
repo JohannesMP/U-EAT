@@ -100,10 +100,11 @@ public class DragEvent : MouseEvent
 public static class InputManager
 {
     //// list of Input States so we can determine different states.
+
+    static public Vector2 MousePosition { get { return Input.mousePosition; } }
+    static public Vector3 MouseWorldPosition { get { return Camera.main.ScreenToWorldPoint(MousePosition); } } //= new Vector3();
 #if UNITY_EDITOR
-    static public Vector2 MousePosition = new Vector2();
-    static public Vector3 MouseWorldPosition = new Vector3();
-    static public bool MouseScrolling = false;
+    //static public bool MouseScrolling { get { return Input.Mous } }
     static public bool MouseDragging = false;
     static readonly int InputSize = 512;
     static public bool[] LastInputState = new bool[InputSize];

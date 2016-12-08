@@ -40,5 +40,3 @@ public class OrientToObject2DOnEvent : OnEvent
         transform.eulerAngles = aimVec;
     }
 }
-
-

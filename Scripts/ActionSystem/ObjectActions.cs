@@ -101,4 +101,8 @@ public static class ActionExtensions
         }
         return comp;
     }
+    public static T GetOrAddComponent<T>(this Component me) where T : Component
+    {
+        return me.gameObject.GetOrAddComponent<T>();
+    }
 }

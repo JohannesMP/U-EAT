@@ -169,9 +169,9 @@ public static class ExtensionMethods
         return false;
     }
 
-    public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider me, bool inherit = false) where T : Attribute
+    public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider me, bool includeInheritedTypes = false) where T : Attribute
     {
-        return (T[])me.GetCustomAttributes(typeof(T), inherit);
+        return (T[])me.GetCustomAttributes(typeof(T), includeInheritedTypes);
     }
 
 
@@ -253,4 +253,3 @@ public static class ExtensionMethods
         me.eulerAngles = aimVec;
     }
 }
-
