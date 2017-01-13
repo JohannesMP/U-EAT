@@ -148,7 +148,7 @@ public static class ExtensionMethods
     {
         for (int i = 0; i < instance.Length; ++i)
         {
-            if (instance[i].Equals(param))
+            if (EqualityComparer<T>.Default.Equals(instance[i], param))
             {
                 return i;
             }
@@ -169,9 +169,9 @@ public static class ExtensionMethods
         return false;
     }
 
-    public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider me, bool inherit = false) where T : Attribute
+    public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider me, bool includeInheritedTypes = false) where T : Attribute
     {
-        return (T[])me.GetCustomAttributes(typeof(T), inherit);
+        return (T[])me.GetCustomAttributes(typeof(T), includeInheritedTypes);
     }
 
 
@@ -252,4 +252,11 @@ public static class ExtensionMethods
         aimVec = new Vector3(me.eulerAngles.x, me.eulerAngles.y, Mathf.Atan2(aimVec.y, aimVec.x) * 180 / Mathf.PI + angleOffset);
         me.eulerAngles = aimVec;
     }
+
+    //static GameObject BlockingObject;
+    //static public void GetFirstBlockingObject(this Camera me)
+    //{
+    //    var ray = me.ScreenPointToRay(InputManager.MousePosition);
+    //    var hits = Physics.RaycastAll(ray);
+    //}
 }

@@ -122,9 +122,11 @@ namespace CustomInspector
         {
             Comp = (target as MegaComponent);
         }
+
         public override void OnInspectorGUI()
         {
-            foreach(var comp in Comp.ComponentList)
+
+            foreach (var comp in Comp.ComponentList)
             {
                 comp.enabled = (target as MegaComponent).enabled;
             }
@@ -140,14 +142,20 @@ namespace CustomInspector
                 GUILayout.Label("Are you sure you want to break up this MegaComponent?");
                 if (GUILayout.Button("Yes"))
                 {
-                    Comp.ReleaseComponents();
+                    foreach (MegaComponent i in targets)
+                    {
+                        Comp.ReleaseComponents();
+                    }
                 }
                 if (GUILayout.Button("No"))
                 {
-                    Confirmation = false;
+                    foreach (MegaComponent i in targets)
+                    {
+                        Confirmation = false;
+                    }
                 }
             }
-        }
+        }  
     }
 }
 #endif

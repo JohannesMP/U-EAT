@@ -69,8 +69,8 @@ public class MegaButtonColors : MegaComponent
     // Use this for initialization
     void Start ()
     {
-        var reactive = this.GetOrAddComponent<Reactive>();
-        reactive.MouseEvents = true;
+        //var reactive = this.GetOrAddComponent<Reactive>();
+        //reactive.MouseEvents = true;
         MouseEnterColorComp.ListenEventName = Events.MouseEnter;
         MouseExitColorComp.ListenEventName = Events.MouseExit;
         MouseUpColorComp.ListenEventName = Events.MouseUpAsButton;

@@ -97,12 +97,19 @@ public class FollowObjectOnEvent : OnEvent
             }
             if (UseLerp)
             {
-                newPos = Vector3.Lerp(transform.position, TargetPos, speed);
+                newPos = Vector3.Lerp(transform.position, TargetPos, Mathf.Clamp01(speed));
             }
             else
             {
                 var dir = (TargetPos - gameObject.transform.position) / DistanceFromTarget;
+                var previousPos = newPos;
                 newPos = transform.position + (dir * speed);
+                var currentPosToTargetMag = (TargetPos - newPos).sqrMagnitude;
+                var previousPosToCurrentPosMag = (previousPos - newPos).sqrMagnitude;
+                if (previousPosToCurrentPosMag >= currentPosToTargetMag)
+                {
+                    newPos = TargetPos;
+                }
             }
         }
 

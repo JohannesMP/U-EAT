@@ -3,11 +3,17 @@ using System.Collections;
 using System;
 
 [Serializable]
-public class Boolean4 : Boolean3
+public struct Boolean4
 {
+    public bool x;
+    public bool y;
+    public bool z;
     public bool w;
-    public Boolean4(bool xVal = false, bool yVal = false, bool zVal = false, bool wVal = false) : base(xVal, yVal, zVal)
+    public Boolean4(bool xVal = false, bool yVal = false, bool zVal = false, bool wVal = false)
     {
+        x = xVal;
+        y = yVal;
+        z = zVal;
         w = wVal;
     }
 }
@@ -31,14 +37,14 @@ namespace CustomInspector
             var zRef = property.FindPropertyRelative("z");
             var wRef = property.FindPropertyRelative("w");
             var newBool = Draw4(position, new Boolean4(xRef.boolValue, yRef.boolValue, zRef.boolValue, wRef.boolValue), label, fieldInfo);
-            xRef.boolValue = newBool.x;
-            yRef.boolValue = newBool.y;
-            zRef.boolValue = newBool.z;
-            wRef.boolValue = newBool.w;
+            xRef.boolValue = newBool.Value.x;
+            yRef.boolValue = newBool.Value.y;
+            zRef.boolValue = newBool.Value.z;
+            wRef.boolValue = newBool.Value.w;
         }
 
-        [ExposeDrawMethod]
-        static public Boolean4 Draw4(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
+        [ExposeDrawMethod(typeof(Boolean4))]
+        static public ReferenceType<Boolean4> Draw4(Rect position, object eventsObj, GUIContent content, ICustomAttributeProvider info = null)
         {
             Boolean4 boolPair = (Boolean4)eventsObj;
             var boolArray = new bool[] { boolPair.x, boolPair.y, boolPair.z, boolPair.w };

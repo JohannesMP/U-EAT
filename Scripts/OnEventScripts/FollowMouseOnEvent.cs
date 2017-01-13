@@ -42,7 +42,7 @@ public class FollowMouseOnEvent : OnEvent
         }
         else
         {
-            Vector3 newPos = Vector3.Lerp(transform.position, mousePos, speed);
+            Vector3 newPos = Vector3.Lerp(transform.position, mousePos, Mathf.Clamp01(speed));
             if (UseTimeScaleOrBounds.y)
             {
                 newPos.x = Mathf.Clamp(newPos.x, XBounds.x, XBounds.y);

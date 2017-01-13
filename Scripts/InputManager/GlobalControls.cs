@@ -27,7 +27,22 @@ class GlobalControls
     public static List<InputCodes> TogglePauseMenu = new List<InputCodes> { KeyCode.Escape };
     public static List<InputCodes> Restart = new List<InputCodes> { KeyCode.R };
     public static List<InputCodes> Invincible = new List<InputCodes> { KeyCode.I };
+    public static List<InputCodes> Any = new List<InputCodes> { Mouse.LEFT, Mouse.RIGHT, Mouse.MIDDLE, KeyCode.Space, KeyCode.Escape, KeyCode.KeypadEnter };
+
+    static GlobalControls()
+    {
+        for(int i = (int)KeyCode.A; i <= (int)KeyCode.Z; ++i)
+        {
+            Any.Add((KeyCode)i);
+        }
+        for (int i = (int)KeyCode.Alpha0; i <= (int)KeyCode.Alpha9; ++i)
+        {
+            Any.Add((KeyCode)i);
+        }
+    }
 }
+
+
 public enum InputTypes
 {
     Mouse,

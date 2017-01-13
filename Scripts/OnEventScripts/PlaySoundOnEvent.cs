@@ -58,9 +58,3 @@ public class PlaySoundOnEvent : EditOnEvent
         EditChecks(Seq);
     }
 }
-
-[Serializable]
-public struct AudioSettings
-{
-
-}

@@ -26,18 +26,7 @@ public class ObjectActions : MonoBehaviour
     public bool UseGamePaused { get { return UseTimeScaleOrPaused.y; } set { UseTimeScaleOrPaused.y = value; } }
     const bool IsVisibleInInspector = false;
     public ActionGroup Actions = new ActionGroup();
-    float TimeScaleProp = 1;
-    public float IndividualTimeScale
-    {
-        get
-        {
-            return TimeScaleProp;
-        }
-        set
-        {
-            TimeScaleProp = value;
-        }
-    }
+    public float IndividualTimeScale = 1;
     void Start()
     {
         if (!IsVisibleInInspector)

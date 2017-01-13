@@ -16,10 +16,10 @@ public class SpawnPrefabOnEvent : OnEvent
 
     public override void OnEventFunc(EventData data)
     {
-       if(!ObjectToSpawn)
-       {
-            throw new System.Exception(this.GetType().Name + " on object " + gameObject.name + " has no object to spawn.");
-       }
+        if(!ObjectToSpawn)
+        {
+             throw new System.Exception(this.GetType().Name + " on object " + gameObject.name + " has no object to spawn.");
+        }
 
         var obj = Instantiate(ObjectToSpawn);
         var pos = SpawnPosition;
@@ -33,5 +33,10 @@ public class SpawnPrefabOnEvent : OnEvent
         }
         obj.transform.position = pos;
         
+    }
+
+    void Update()
+    {
+
     }
 }
