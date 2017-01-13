@@ -52,27 +52,27 @@ public struct GamepadTriggerValues
     public float RightTrigger;
 }
 
-//public class KeyboardEvent : EventData
-//{
-//    public KeyCode KeyCode;
+public class KeyboardEvent : EventData
+{
+    public KeyCode KeyCode;
 
-//    public KeyboardEvent(KeyCode keyCode)
-//    {
-//        KeyCode = keyCode;
-//    }
-//}
+    public KeyboardEvent(KeyCode keyCode)
+    {
+        KeyCode = keyCode;
+    }
+}
 
-//public class MouseEvent : EventData
-//{
-//    public Mouse Button;
-//    public Vector2 Position;
+public class MouseEvent : EventData
+{
+    public Mouse Button;
+    public Vector2 Position;
 
-//    public MouseEvent(Mouse button, Vector2 position)
-//    {
-//        Button = button;
-//        Position = position;
-//    }
-//}
+    public MouseEvent(Mouse button, Vector2 position)
+    {
+        Button = button;
+        Position = position;
+    }
+}
 
 public class ScrollEvent : EventData
 {
@@ -88,93 +88,38 @@ public class ScrollEvent : EventData
     }
 }
 
-//public class DragEvent : MouseEvent
-//{
-//    public Vector2 Delta;
-//    public DragEvent(Mouse button, Vector2 position, Vector2 delta) : base(button, position)
-//    {
-//        Delta = delta;
-//    }
-//}
+public class DragEvent : MouseEvent
+{
+    public Vector2 Delta;
+    public DragEvent(Mouse button, Vector2 position, Vector2 delta) : base(button, position)
+    {
+        Delta = delta;
+    }
+}
 
 public static class InputManager
 {
     //// list of Input States so we can determine different states.
 
-
-
+    static public Vector2 MousePosition { get; set; }
+    static public Vector3 MouseWorldPosition { get; set; } //= new Vector3();
 #if UNITY_EDITOR
-    static public Vector2 MousePosition
-    {
-        get
-        {
-            if(Application.isPlaying)
-            {
-                return Input.mousePosition;
-            }
-            return MousePositionProp;
-        }
-        set
-        {
-            if (Application.isPlaying)
-            {
-                MousePositionProp = value;
-            }
-        }
-    }
-    static public Vector3 MouseWorldMainPosition
-    {
-        get
-        {
-            if (Application.isPlaying)
-            {
-                return Camera.main.ScreenToWorldPoint(MousePosition);
-            }
-            return MouseWorldPositionProp;
-        }
-        set
-        {
-            if (Application.isPlaying)
-            {
-                MouseWorldPositionProp = value;
-            }
-        }
-    }
-    static public Vector2 MousePositionProp = new Vector3();
-    static public Vector3 MouseWorldPositionProp = new Vector3();
     static public bool MouseScrolling { get; set; }
     static public bool MouseDragging = false;
     static readonly int InputSize = 512;
     static public bool[] LastInputState = new bool[InputSize];
     static public bool[] CurrentInputState = new bool[InputSize];
-#else
-    static public Vector2 MousePosition { get { return Input.mousePosition; } }
-    static public Vector3 MouseWorldMainPosition { get { return Camera.main.ScreenToWorldPoint(MousePosition); } } //= new Vector3();
+#endif
     //static KeyboardEvent KeyboardData = new KeyboardEvent(KeyCode.A);
     //static MouseEvent MouseData = new MouseEvent(Mouse.LEFT, new Vector2(0,0));
-#endif
 
-    static public Vector3 MouseWorldPosition(Camera cam = null)
-    {
-        if (!cam) cam = Camera.main;
-        return cam.ScreenToWorldPoint(MousePosition);
-    }
+
 
     static InputManager()
     {
 
     }
-
-    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    //static void Start()
-    //{
-
-    //}
     
-    //static void OnLogicUpdate()
-    //{
-
-    //}
 
     /*********************************************************************
      Keyboard wrappers 
