@@ -142,14 +142,14 @@ namespace CustomInspector
                 GUILayout.Label("Are you sure you want to break up this MegaComponent?");
                 if (GUILayout.Button("Yes"))
                 {
-                    foreach (MegaComponent i in targets)
+                    if(targets.Length != 0)
                     {
                         Comp.ReleaseComponents();
                     }
                 }
                 if (GUILayout.Button("No"))
                 {
-                    foreach (MegaComponent i in targets)
+                    if(targets.Length != 0)
                     {
                         Confirmation = false;
                     }
