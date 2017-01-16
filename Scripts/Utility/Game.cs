@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 #if UNITY_EDITOR
@@ -66,6 +66,8 @@ public class Game : MonoBehaviour
 
     static GameObject HandlerResource;
 
+    static bool HaveInitialized = false;
+
     static Game()
     {
     }
@@ -121,6 +123,30 @@ public class Game : MonoBehaviour
     void GlobalUpdate()
     {
         GameWasPlaying = Application.isPlaying;
+
+        if(GameSession == null)
+        {
+            if (!HaveInitialized)
+            {
+                Debug.Log("GameSession is null. Attempting to load again in case this is the first ever time running U-EAT");
+                HaveInitialized = true;
+                InitializeGame();
+
+                if(GameSession != null)
+                {
+                    Debug.Log("Success! You can now clear the console and this error should no longer occur.");
+                }
+                else
+                {
+                    Debug.Log("Error! Please double-check that the U-EAT GameSession Prefab is correctly configured.");
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
         GameSession.DispatchEvent(Events.EngineUpdate);
     }
 
