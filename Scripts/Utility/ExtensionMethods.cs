@@ -129,7 +129,7 @@ public static class ExtensionMethods
     public static GameObject GetSpace(this MonoBehaviour instance)
     {
         var obj = GameObject.FindGameObjectWithTag("Space");
-        if (obj.Equals(null))
+        if (obj == null)
         {
             obj = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Space"));
         }
