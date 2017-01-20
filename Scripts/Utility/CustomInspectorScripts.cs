@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
@@ -151,17 +151,30 @@ namespace CustomInspector
                         var depth = prop.depth + 1;
                         if (prop.isArray && prop.isExpanded)
                         {
-                            while (prop.NextVisible(true))
+                            bool runNext = prop.NextVisible(true);
+                            while (runNext)
                             {
+
                                 if (prop.depth == 0)
                                 {
                                     break;
                                 }
-                                else if(prop.depth > depth)
+                                GUILayout.BeginHorizontal();
+                                for (int j = depth; j < prop.depth; ++j)
                                 {
-                                    continue;
+                                    GUILayout.Space(15);
                                 }
                                 EditorGUILayout.PropertyField(prop);
+                                GUILayout.EndHorizontal();
+                                var name = prop.name;
+                                if (prop.hasVisibleChildren && prop.isExpanded)
+                                {
+                                    runNext = prop.NextVisible(true);
+                                }
+                                else
+                                {
+                                    runNext = prop.NextVisible(false);
+                                }
                             }
                         }
                     }
