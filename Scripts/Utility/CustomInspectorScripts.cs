@@ -148,8 +148,8 @@ namespace CustomInspector
                     if (prop != null)
                     {
                         EditorGUILayout.PropertyField(prop);
-                        var depth = prop.depth + 1;
-                        if (prop.isArray && prop.isExpanded)
+                        var depth = prop.depth;
+                        if (prop.isExpanded)
                         {
                             bool runNext = prop.NextVisible(true);
                             while (runNext)
